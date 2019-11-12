@@ -11,20 +11,23 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 library(readxl)
 library(tidyverse)
-
+library(ggplot2)
+library(rworldmap)
+library(dplyr)
+library(corrplot)
+library(tidyverse)
+library(readxl)
+library(shiny)
 
 ```
 
 ```{r}
-data_2019 = read_csv("./data/2019.csv")
-data_2015 = read_csv("./data/2015.csv")
-data_2016 = read_csv("./data/2016.csv")
-data_2017 = read_csv("./data/2017.csv")
-data_2018 = read_csv("./data/2018.csv")
 data_all = read_excel("./data/WHR.xls")
 data_concap = read_csv("./data/concap.csv")
 
 ```
+
+
 ```{r}
 data_all = 
  data_all %>% 
@@ -60,10 +63,10 @@ inter_r =
   data_all_na <- inter_r[list,]
 
   # 最终数据集：1.无删失 2.年份2011-2018
- final_data = 
- inter_r %>% 
-  drop_na() %>% 
-    filter(year %in% c(2011:2018))
+ final_data <- 
+   inter_r %>% 
+   drop_na() %>% 
+   filter(year %in% c(2011:2018))
   
  # 最终国家数量
    country_number =
@@ -98,3 +101,20 @@ terrorism
 
 https://www.kaggle.com/mshinde10/predicting-world-happiness/notebook
 plotly画世界地图
+
+
+
+```{r}
+
+q<-map_data("world")
+correction<-c("Congo (Brazzaville)"="Democratic Republic of the Congo","Congo (Kinshasa)"="Republic of Congo","United States"="USA","United Kingdom"= "UK")
+
+for(i in names(correction)){
+    final_data <- 
+      final_data %>% 
+      mutate(country_name= ifelse(country == i, correction[i], country_name))
+}
+colnames(q)[5] = "country_name"
+final_data <- left_join(q,final_data) %>% select(-group,-order)
+```
+
