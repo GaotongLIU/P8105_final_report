@@ -112,9 +112,13 @@ correction<-c("Congo (Brazzaville)"="Democratic Republic of the Congo","Congo (K
 for(i in names(correction)){
     final_data <- 
       final_data %>% 
-      mutate(country_name= ifelse(country == i, correction[i], country_name))
+      mutate(country_name= ifelse(country_name == i, correction[i], country_name))
 }
 colnames(q)[5] = "country_name"
-final_data <- left_join(q,final_data) %>% select(-group,-order)
+final_data <- left_join(final_data,q) %>% select(-group,-order)
+```
+
+```{r}
+
 ```
 
