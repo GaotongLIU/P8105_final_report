@@ -2,7 +2,10 @@
 title: "yuqi-FP-plot_trial"
 author: "Yuqi Miao"
 date: "11/12/2019"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r}
@@ -18,7 +21,7 @@ library(viridis)
 ```
 
 
-### firstly draw every years map
+# firstly draw every years map
 
 ```{r}
 happy = read_csv("data/final_data.csv") %>% 
@@ -80,6 +83,43 @@ create a link?
 # Set up API credentials: https://plot.ly/r/getting-started
 chart_link = api_create(p, filename="choropleth-world")
 chart_link
+
+2. with long and lat?
+necessary?
+
+
+# Secondly, try to add movable bar.
+
+1. can we substitute this movie histogrom to our plot?
+```{r}
+ui <- shinyUI(fluidPage(
+  titlePanel("Years"),
+  sidebarPanel(
+    sliderInput("year", "Year:", min = 2011, max = 2018, value = 1)
+  ),
+  mainPanel(
+    plotlyOutput("trendPlot")
+  )
+))
+
+
+## instead with world map 
+
+server <- shinyServer(function(input, output) {
+
+  output$trendPlot <- renderPlotly({
+
+    ##plot function
+    p <- global_happy_year(input$year)
+    # style the xaxis
+    layout(p)
+  })
+})
+shinyApp(ui, server)
+```
+
+
+
 
 
 
