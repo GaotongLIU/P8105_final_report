@@ -2,7 +2,7 @@
 title: "Untitled"
 author: "Ruoyuan Qian"
 date: "11/15/2019"
-output: github_document
+output: html_document
 ---
 
 ```{r}
@@ -118,7 +118,7 @@ global_happy_year <- function(i,variable){
   happy_yeari_value = happy %>% 
     filter(year == i) %>% 
     select(variable,everything())
-  happy_yeari %>%
+  happy_yeari_value %>%
   plot_geo(marker = list(color = toRGB("purple"),
                        #opacity = 0.5,    #用了整个地图会一起透明
                        #size = 0.5,
@@ -126,17 +126,17 @@ global_happy_year <- function(i,variable){
                                    width = 0.1))) %>%  
   add_trace(
     z = ~life_ladder, color = ~life_ladder, colors = 'Blues',
-    locations = ~code, marker = list(line = l)
+    text = ~label,locations = ~code, marker = list(line = l)
   ) %>%
     add_markers(x = ~med_long,
               y = ~med_lat,
               sizes = c(.1, 1), #改了没变化，不知道怎么用
-              size = ~happy_yeari_value[[1]],
+              size = ~happy_yeari_value[[1]]^3,
               hoverinfo = "text",
               text = ~paste("<b>Happiness:" , round(life_ladder,2),
                             '</b><br>country: ', country_name,
                             '</b><br>',variable,': ', round(happy_yeari_value[[1]],2)
-                            )
+                            ) ### how to specify the labels, what format?
               ) %>%
   layout(geo = g) %>% 
   colorbar(title = 'Happiness index')
@@ -145,5 +145,5 @@ global_happy_year <- function(i,variable){
 
 
 ```{r}
-global_happy_year(2011,"log_gdp_per_capita")
+global_happy_year(2011,"social_support")
 ```
