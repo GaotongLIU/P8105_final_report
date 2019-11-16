@@ -46,8 +46,22 @@ g <- list(
 location = read_csv("data/concap.csv") %>% 
   janitor::clean_names() 
 
-happy_location = left_join(happy, location, by = "country_name")
+happy_location_raw = left_join(happy, location, by = "country_name")
 
+happy_location_lost = 
+happy_location_raw %>% 
+  filter(country_name %in% c("Ivory Coast","UK","USA")) %>% 
+  mutate(
+    capital_longitude = c(c(rep(-5.3,6)),c(rep(-0.116667,8)),c(rep(-77.013222,8))),
+    capital_latitude = 
+c(c(rep(6.85,6)),c(rep(51.5,8)),c(rep(38.913611,8)))
+  )
+
+
+
+happy_location = 
+bind_rows(happy_location_raw,happy_location_lost) %>% 
+  drop_na(capital_latitude,capital_longitude)
 ```
 
 ```{r}
