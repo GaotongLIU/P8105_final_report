@@ -84,3 +84,66 @@ happy_location = left_join(happy, location, by = "country_name")
 ```
 
 
+
+### 191115 ym2771 plot 2:interaction relationship plot create
+
+## make median long and lat as the plot point
+```{r}
+library(plotly)
+happy = read_csv("data/final_data.csv") %>% 
+  janitor::clean_names() %>%
+  group_by(country_name) %>% 
+  mutate(med_long = median(long),med_lat = median(lat)) %>% 
+  select(-long,-lat) %>% 
+  unique %>% 
+  mutate(label = str_c("<b>Happiness: ", round(life_ladder,2), 
+                      "</b><br>Country : ", country_name,
+                      sep = ""),
+        code = countrycode(country_name, 'country.name', 'iso3c'),## match code
+        code = replace_na(code,"XKX"))
+```
+
+## try to add marker for variable
+```{r}
+l <- list(color = toRGB("grey"), width = 0.5)
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+## making map according to year
+## problem unsolved: How to make it a variable?
+global_happy_year <- function(i,variable){
+  happy_yeari_value = happy %>% 
+    filter(year == i) %>% 
+    select(variable,everything())
+  happy_yeari %>%
+  plot_geo(marker = list(color = toRGB("purple"),
+                       #opacity = 0.5,    #用了整个地图会一起透明
+                       #size = 0.5,
+                       line = list(color = toRGB("purple"),
+                                   width = 0.1))) %>%  
+  add_trace(
+    z = ~life_ladder, color = ~life_ladder, colors = 'Blues',
+    locations = ~code, marker = list(line = l)
+  ) %>%
+    add_markers(x = ~med_long,
+              y = ~med_lat,
+              sizes = c(.1, 1), #改了没变化，不知道怎么用
+              size = ~happy_yeari_value[[1]],
+              hoverinfo = "text",
+              text = ~paste("<b>Happiness:" , round(life_ladder,2),
+                            '</b><br>country: ', country_name,
+                            '</b><br>',variable,': ', round(happy_yeari_value[[1]],2)
+                            )
+              ) %>%
+  layout(geo = g) %>% 
+  colorbar(title = 'Happiness index')
+}
+```
+
+
+```{r}
+global_happy_year(2011,"log_gdp_per_capita")
+```
