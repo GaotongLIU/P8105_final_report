@@ -1,0 +1,169 @@
+---
+title: "yuqi-FP-plot_trial"
+author: "Yuqi Miao"
+date: "11/12/2019"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r}
+library(plotly)
+library(shiny)
+library(tidyverse)
+library(rworldmap)
+library(arsenal)
+library(leaflet)
+library(rworldmap) 
+library(countrycode)  # Gets country code 
+library(viridis)
+```
+
+
+# firstly draw every years map
+
+```{r}
+happy = read_csv("data/final_data.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-long,-lat) %>% 
+  unique %>% 
+  mutate(label = str_c("<b>Happiness: ", round(life_ladder,2), 
+                      "</b><br>Country : ", country_name,
+                      sep = ""),
+        code = countrycode(country_name, 'country.name', 'iso3c'),## match code
+        code = replace_na(code,"XKX"))
+
+```
+
+with long and lat, how to map in plotly?
+
+1. not long and lat but world choroplath
+
+plot the map according to year. Try to make it a function taking year as argument.
+```{r}
+# light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+## making map according to year
+
+global_happy_year <- function(i){
+  happy_yeari = happy %>% 
+    filter(year == i)
+  p <- plot_geo(happy_yeari) %>%
+  add_trace(
+    z = ~life_ladder, color = ~life_ladder, colors = 'Blues',
+    text = ~label, locations = ~code, marker = list(line = l)
+  ) %>%
+  colorbar(title = 'Happiness index') %>%
+  layout(
+    title = paste(as.character(i), "Global Happiness Index"),
+    geo = g
+  )
+  return(p)
+}
+
+global_happy_year(2018)
+global_happy_year(2017)
+global_happy_year(2016)
+global_happy_year(2011)
+
+
+
+```
+create a link?
+# Create a shareable link to your chart
+# Set up API credentials: https://plot.ly/r/getting-started
+chart_link = api_create(p, filename="choropleth-world")
+chart_link
+
+2. with long and lat?
+necessary?
+
+
+# Secondly, try to add movable bar.
+
+1. can we substitute this movie histogrom to our plot?
+```{r}
+ui <- shinyUI(fluidPage(
+  titlePanel("Years"),
+  sidebarPanel(
+    sliderInput("year", "Year:", min = 2011, max = 2018, value = 1)
+  ),
+  mainPanel(
+    plotlyOutput("trendPlot")
+  )
+))
+
+
+## instead with world map 
+
+server <- shinyServer(function(input, output) {
+
+  output$trendPlot <- renderPlotly({
+
+    ##plot function
+    p <- global_happy_year(input$year)
+    # style the xaxis
+    layout(p)
+  })
+})
+shinyApp(ui, server)
+```
+
+
+
+
+## try to add gif(zhazha shuyi)
+```{r}
+library(magick)
+library(animation)
+library(rbokeh)
+library(htmlwidgets)
+library(mapview)
+library(webshot)
+library(processx)
+library(listviewer)
+library(gridExtra)
+
+saveWidget(global_happy_year(2011),file = "m2011.html")
+saveWidget(global_happy_year(2016),file = "m2016.html")
+saveWidget(global_happy_year(2017),file = "m2017.html")
+saveWidget(global_happy_year(2018),file = "m2018.html")
+
+webshot::install_phantomjs()
+webshot(url = "m2011.html",file = "data/m2011.jpg",vwidth = 990,
+  vheight = 750, delay = 0.5)
+webshot(url = "m2016.html",file = "data/m2016.jpg",vwidth = 992,
+  vheight = 744, delay =0.5 )
+webshot(url = "m2017.html",file = "data/m2017.jpg",vwidth = 992,
+  vheight = 744, delay = 0.5)
+webshot(url = "m2018.html",file = "data/m2018.jpg",vwidth = 990,
+  vheight = 750, delay = 0.5)
+
+
+global_happy_year(2018)
+global_happy_year(2017)
+global_happy_year(2016)
+global_happy_year(2011)
+
+list.files(path = "data/",pattern = "*.jpeg",full.names = T) %>% 
+  map(image_read) %>% 
+  image_join() %>% 
+  image_animate(fps=2) 
+
+
+
+```
+
+
+
+
+
