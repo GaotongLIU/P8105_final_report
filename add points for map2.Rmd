@@ -3,6 +3,7 @@ title: "Untitled"
 author: "Ruoyuan Qian"
 date: "11/15/2019"
 output: html_document
+runtime: shiny
 ---
 
 ```{r}
@@ -128,7 +129,7 @@ g <- list(
 )
 ## making map according to year
 ## problem unsolved: How to make it a variable?
-global_happy_year <- function(i,variable){
+global_happy_compare <- function(i,variable){
   happy_yeari_value = happy %>% 
     filter(year == i) %>% 
     select(variable,everything())
@@ -159,5 +160,55 @@ global_happy_year <- function(i,variable){
 
 
 ```{r}
-global_happy_year(2011,"social_support")
+global_happy_compare(2011,"social_support")
 ```
+
+### 191116  ym2771 Add shiny on plot 2
+
+```{r}
+ui <- shinyUI(fluidPage(
+  titlePanel("relationship plot"),
+  sidebarPanel(
+    selectInput('year', 'Year', unique(happy$year),
+    selected = "2011"),
+    selectInput('variable', 'Predictor', names(happy)[3:11],
+    selected = "social_support")),
+  mainPanel(
+    plotlyOutput("Plot1")
+  )
+))
+
+
+## instead with world map 
+
+server <- shinyServer(function(input, output) {
+
+  output$Plot1 <- renderPlotly({
+
+    ##plot function
+    p <- global_happy_compare(as.numeric(input$year),as.character(input$variable)) 
+    ## When having 2 data input, we need to put it together? how could we use it separatly?
+    layout(p)
+  })
+})
+shinyApp(ui, server)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
