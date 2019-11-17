@@ -186,3 +186,60 @@ happy %>%
 * Happiness increase worldwide, only life expectancy and gdp increase worldwide.
 * Happiness increase in most continents, but remain the same in Australia and  decrease in South America. However, only life expectancy seems to change. 
 
+## Correlation of happiness and other factors
+### Scaterplot and box plot with smooth: Worldwide
+```{r}
+## all time:2011 - 2018
+happy = happy %>% 
+  pivot_longer(gdp:corruption,
+               names_to = "factors",
+               values_to = "value") 
+happy_transform = happy_transform %>% 
+  pivot_longer(social_support:log_life_expectancy,
+               names_to = "factors",
+               values_to = "value") 
+happy %>% 
+  ggplot(aes(x = happiness_score, y = value, color  = factors)) +
+  geom_point() +
+  geom_smooth(method = lm, color = "red") +
+  facet_grid(year ~ factors)+
+  labs(title = "2011-2018")
+
+#  2018
+happy %>% 
+  filter(year == 2018) %>% 
+  ggplot(aes(x = happiness_score, y = value, color  = factors)) +
+ geom_point() +
+  geom_boxplot() + 
+  geom_smooth(method = lm, color = "red") +
+  facet_grid(. ~ factors) +
+  labs(title = "2018")
+
+## 2018:  log transform gdp, life expectancy
+happy_transform %>% 
+  filter(year == 2018) %>% 
+  ggplot(aes(x = happiness_score, y = value, color  = factors)) +
+  geom_point() +
+  geom_boxplot() + 
+  geom_smooth(method = lm, color = "red") +
+  facet_grid(. ~ factors ) +
+  labs(title = "2018 transformed gdp, life expectancy")
+
+```
+
+### Scaterplot and box plot with smooth: Region
+```{r}
+## 2011- 2018:  log transform gdp, life expectancy
+happy_transform %>% 
+  ggplot(aes(x = happiness_score, y = value, color  = factors)) +
+  geom_point() +
+  geom_boxplot() + 
+  geom_smooth(method = lm, color = "red") +
+  facet_grid(continent ~ factors ) +
+  labs(title = "2011-2018 transformed gdp, life expectancy")
+
+```
+
+* Not very useful on region
+* Worlwide can see positive correlation of happiness score and freedom, gdp, life expectancy, positive affect, social support. Negative: corruption, generosity, negative effect
+
