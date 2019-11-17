@@ -2,7 +2,7 @@
 title: "20191112_Descriptive"
 author: "Gaotong LIU"
 date: "11/12/2019"
-output: html_document
+output: github_document
 editor_options: 
   chunk_output_type: console
 ---
@@ -242,4 +242,67 @@ happy_transform %>%
 
 * Not very useful on region
 * Worlwide can see positive correlation of happiness score and freedom, gdp, life expectancy, positive affect, social support. Negative: corruption, generosity, negative effect
+
+### Correlation plot: Worldwide
+```{r}
+# Finding the correlation between numerical columns
+happy %>% 
+  pivot_wider(names_from = factors,
+              values_from = value) %>% 
+  select(-c(country,year,continent)) %>% 
+  cor() %>%
+  corrplot(method = 'square', type = "upper", title = "2011-2018") 
+
+happy %>% 
+  filter(year == 2018) %>% 
+  pivot_wider(names_from = factors,
+              values_from = value) %>% 
+  select(-c(country,year,continent)) %>% 
+  cor() %>%
+  corrplot(method = 'square', type = "upper", title = "2018") 
+  
+happy %>% 
+  filter(year == 2018) %>% 
+  pivot_wider(names_from = factors,
+              values_from = value) %>% 
+  select(-c(country,year,continent)) %>% 
+  cor() %>%
+  corrplot(method = 'number', type = "upper", title = "2018") 
+
+```
+
+### Correlation plot: Region
+```{r}
+# Finding the correlation between numerical columns
+happy %>% 
+  filter(continent == "Australia") %>% 
+  pivot_wider(names_from = factors,
+              values_from = value) %>% 
+  select(-c(country,year,continent)) %>% 
+  cor() %>%
+  corrplot(method = 'square', type = "upper", title =  "Australia: 2011-2018") 
+
+happy %>% 
+  filter(continent %in% c("Europe", "North America", "South America")) %>% 
+  pivot_wider(names_from = factors,
+              values_from = value) %>% 
+  select(-c(country,year,continent)) %>% 
+  cor() %>%
+  corrplot(method = 'square', type = "upper", title = "Europe, North America, South America: 2011-2018") 
+
+happy %>% 
+  filter(continent %in% c("Africa", "Asia")) %>% 
+  pivot_wider(names_from = factors,
+              values_from = value) %>% 
+  select(-c(country,year,continent)) %>% 
+  cor() %>%
+  corrplot(method = 'square', type = "upper", title = "Africa, Asia: 2011-2018") 
+```
+
+* Different continent the strength of correlation is different,
+Australia: freedom, social support
+
+Europe, North America, South America: gdp, life expectancy, freedom, social support, corruption
+
+Africa, Asia:  gdp, life expectancy,social support
 
