@@ -37,9 +37,6 @@ happy =
          "life_expectance" = healthy_life_expectancy_at_birth,
          "freedom" = freedom_to_make_life_choices,
          "corruption" = perceptions_of_corruption) %>% 
-  pivot_longer(gdp:corruption,
-               names_to = "factors",
-               values_to = "value") %>% 
   select(-c(long, lat)) %>% 
   unique()
 
@@ -88,6 +85,7 @@ happy = happy %>%
     TRUE ~ as.character("Africa")
   ))
 
+
 ## May need transformation ? for MLR?
 happy_transform =
   read_csv("data/final_data.csv") %>% 
@@ -100,10 +98,91 @@ happy_transform =
   mutate(log_gdp =  log(gdp),
          log_life_expectancy = log(life_expectancy)) %>% 
   select(-c(long, lat, gdp, life_expectancy)) %>% 
-  pivot_longer(social_support:log_life_expectancy,
-               names_to = "factors",
-               values_to = "value") %>%
   unique()
 
+happy_transform = happy_transform %>% 
+  mutate(continent = case_when(
+    country %in% Asia ~ "Asia",
+    country %in% Europe ~ "Europe",
+    country %in% North_America ~ "North America",
+    country %in% Sorth_America ~ "South America",
+    country %in% Australia ~ "Australia",
+    TRUE ~ as.character("Africa")
+  ))
+
 ```
+
+## Factors change over time
+### Happiness score change over time
+### Mean Happiness score of all countries: worldwide
+```{r}
+happy %>% 
+  group_by(year) %>% 
+  summarise(year_mean_score = mean(happiness_score)) %>% 
+  ggplot(aes(x = year, y = year_mean_score)) +
+  geom_path()
+```
+
+### Mean Happiness score of continent: region
+```{r}
+happy %>% 
+  group_by(year, continent) %>% 
+  summarise(year_mean_score = mean(happiness_score)) %>% 
+  ggplot(aes(x = year, y = year_mean_score, color = continent)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) +  
+  facet_grid(. ~ continent)
+```
+
+### Mean Happiness score of developing vs developed?
+
+### other factors change over time
+### other factors change over time: worldwide
+```{r}
+happy %>% 
+  group_by(year) %>%
+  summarise(mean_gdp = mean(gdp),
+            mean_social_support = mean(social_support),
+            mean_life_expectance = mean(life_expectance),
+            mean_freedom = mean(freedom),
+            mean_positive_affect = mean(positive_affect),
+            mean_negative_affect = mean(negative_affect),
+            mean_generosity  = mean(generosity),
+            mean_corruption  = mean(corruption)) %>% 
+  pivot_longer(mean_gdp:mean_corruption,
+               names_to = "factors",
+               values_to = "mean",
+               names_prefix = "mean_"
+               ) %>% 
+  ggplot(aes(x = year, y = mean, color = factors)) +
+   geom_point(alpha = .7) +
+  geom_smooth(se = FALSE) +  
+  facet_grid(. ~ factors)
+```
+
+### other factors change over time: region
+```{r}
+happy %>% 
+  group_by(year, continent) %>%
+  summarise(mean_gdp = mean(gdp),
+            mean_social_support = mean(social_support),
+            mean_life_expectance = mean(life_expectance),
+            mean_freedom = mean(freedom),
+            mean_positive_affect = mean(positive_affect),
+            mean_negative_affect = mean(negative_affect),
+            mean_generosity  = mean(generosity),
+            mean_corruption  = mean(corruption)) %>% 
+  pivot_longer(mean_gdp:mean_corruption,
+               names_to = "factors",
+               values_to = "mean",
+               names_prefix = "mean_"
+               ) %>% 
+  ggplot(aes(x = year, y = mean, color = factors)) +
+   geom_point(alpha = .7) +
+  geom_smooth(se = FALSE) +  
+  facet_grid(continent ~ factors)
+```
+
+* Happiness increase worldwide, only life expectancy and gdp increase worldwide.
+* Happiness increase in most continents, but remain the same in Australia and  decrease in South America. However, only life expectancy seems to change. 
 
