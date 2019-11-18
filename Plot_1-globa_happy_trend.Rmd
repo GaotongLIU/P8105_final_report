@@ -24,9 +24,8 @@ library(viridis)
 # firstly draw every years map
 
 ```{r}
-happy = read_csv("data/final_data.csv") %>% 
+happy = read_csv("data/final_data_all_country.csv") %>% 
   janitor::clean_names() %>% 
-  select(-long,-lat) %>% 
   unique %>% 
   mutate(label = str_c("<b>Happiness: ", round(life_ladder,2), 
                       "</b><br>Country : ", country_name,
@@ -125,11 +124,13 @@ shinyApp(ui, server)
 ```{r}
 library(magick)
 library(animation)
+#install.packages("rbokeh")
 library(rbokeh)
 library(htmlwidgets)
 library(mapview)
 library(webshot)
 library(processx)
+#install.packages("listviewer")
 library(listviewer)
 library(gridExtra)
 
@@ -154,7 +155,7 @@ global_happy_year(2017)
 global_happy_year(2016)
 global_happy_year(2011)
 
-list.files(path = "data/",pattern = "*.jpeg",full.names = T) %>% 
+list.files(path = "data/",pattern = "*.jpg",full.names = T) %>% 
   map(image_read) %>% 
   image_join() %>% 
   image_animate(fps=2) 
