@@ -1,0 +1,265 @@
+---
+title: "Untitled"
+author: "Ruoyuan Qian"
+date: "11/15/2019"
+output: html_document
+runtime: shiny
+---
+
+```{r}
+library(plotly)
+library(shiny)
+library(tidyverse)
+library(rworldmap)
+library(arsenal)
+library(leaflet)
+library(rworldmap) 
+library(countrycode)  # Gets country code 
+library(viridis)
+```
+
+```{r}
+happy = read_csv("data/final_data_all_country.csv") %>% 
+  janitor::clean_names() %>% 
+  unique %>% 
+  filter(year == 2018) %>% 
+  mutate(label = str_c("<b>Happiness: ", round(life_ladder,2), 
+                      "</b><br>Country : ", country_name,
+                      sep = ""),
+        code = countrycode(country_name, 'country.name', 'iso3c'),## match code
+        code = replace_na(code,"XKX"))
+
+# light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+
+```
+
+
+```{r}
+happy = read_csv("data/final_data_all_country.csv") %>% 
+  janitor::clean_names() %>% 
+  unique %>% 
+  mutate(label = str_c("<b>Happiness: ", round(life_ladder,2), 
+                      "</b><br>Country : ", country_name,
+                      sep = ""),
+        code = countrycode(country_name, 'country.name', 'iso3c'),## match code
+        code = replace_na(code,"XKX"))
+
+
+location = read_csv("data/concap.csv") %>% 
+  janitor::clean_names() 
+
+happy_location_raw = left_join(happy, location, by = "country_name")
+
+ list <-which(rowSums(is.na(happy_location_raw %>% 
+                              select(capital_latitude))) > 0)
+  data_all_na <- happy_location_raw[list,] 
+ 
+  happy_location_lost =  
+ happy_location_raw[list,] %>% 
+   mutate(capital_latitude = case_when(
+    country_name == "Congo (Brazzaville)" ~ -4.267778,
+    country_name == "Ivory Coast" ~ 6.85,
+    country_name == "Gambia" ~ 13.466667,
+    country_name == "North Cyprus" ~ 35.183333,
+    country_name == "Palestinian Territories" ~ 31.516667,
+    country_name == "Taiwan Province of China"~ 25.066667,
+    country_name == "Somaliland region"~ 9.55,
+    country_name == "Congo (Kinshasa)"~ -4.316667,
+    country_name == "Hong Kong S.A.R. of China"~ 114.10000
+    ),
+    capital_longitude = case_when(
+    country_name == "Congo (Brazzaville)" ~ 15.291944,
+    country_name == "Ivory Coast" ~ 5.3,
+    country_name == "Gambia" ~ -16.6,
+    country_name == "North Cyprus" ~ 33.366667,
+    country_name == "Palestinian Territories" ~ 34.45,
+    country_name == "Taiwan Province of China"~ 121.516667,
+    country_name == "Somaliland region"~ 44.05,
+    country_name == "Congo (Kinshasa)"~ 15.316667,
+    country_name == "Hong Kong S.A.R. of China"~ 22.20000)
+    ) 
+  
+
+    
+happy_location = 
+bind_rows(happy_location_raw,happy_location_lost) %>% 
+  drop_na(capital_latitude,capital_longitude)
+
+ list <-which(rowSums(is.na(happy_location %>% 
+                              select(capital_latitude))) > 0)
+  data_all_na <- happy_location[list,]
+  
+```
+Congo : -4.267778, 15.291944
+Gambia: lat 13.466667,   lon -16.6
+North Cyprus : 35.183333  33.366667
+Palestinian Territories : 31.516667, 34.45
+Taiwan : 25.066667 121.516667
+Somaliland region : 9.55, 44.05
+Congo (Kinshasa) : -4.316667, 15.316667
+hongkong : 114.10000,22.20000
+```{r}
+ happy_location_2018 = happy_location %>% 
+    filter(year == 2018)
+
+```
+
+问题：
+1.点太大，不会改
+2.如何只改变点的透明度
+3.点的大小太接近
+```{r}
+ happy_location_2018 %>%
+  plot_geo(marker = list(color = toRGB("purple"),
+                       #opacity = 0.5,    #用了整个地图会一起透明
+                       #size = 0.5,
+                       line = list(color = toRGB("purple"),
+                                   width = 0.1))) %>%  
+  add_trace(
+    z = ~life_ladder, color = ~life_ladder, colors = 'Blues',
+    text = ~label, locations = ~code, marker = list(line = l)
+  ) %>%
+    add_markers(x = ~capital_longitude,
+              y = ~capital_latitude,
+              sizes = c(.1, 1), #改了没变化，不知道怎么用
+              size = ~social_support,
+              hoverinfo = "text",
+              text = ~paste('country: ', country_name,
+                            '<br /> social support: ', social_support)) %>%
+  layout(geo = g) %>% 
+  colorbar(title = 'Happiness index') 
+
+```
+
+
+
+### 191115 ym2771 plot 2:interaction relationship plot create
+
+## try to add marker for variable
+```{r}
+l <- list(color = toRGB("grey"), width = 0.5)
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+## making map according to year
+## problem unsolved: How to make it a variable?
+global_happy_compare <- function(i,variable){
+  happy_yeari_value = happy_location %>% 
+    filter(year == i) %>% 
+    select(variable,everything())
+  happy_yeari_value %>%
+  plot_geo(marker = list(color = toRGB("purple"),
+                       #opacity = 0.5,    #用了整个地图会一起透明
+                       #size = 0.5,
+                       line = list(color = toRGB("purple"),
+                                   width = 0.1))) %>%  
+  add_trace(
+    z = ~life_ladder, color = ~life_ladder, colors = 'Blues',
+    text = ~label,locations = ~code, marker = list(line = l)
+  ) %>%
+    add_markers(x = ~capital_longitude,
+              y = ~capital_latitude,
+              sizes = c(.1, 1), #改了没变化，不知道怎么用
+              size = ~happy_yeari_value[[1]]^3,
+              hoverinfo = "text",
+              text = ~paste("<b>Happiness:" , round(life_ladder,2),
+                            '</b><br>country: ', country_name,
+                            '</b><br>',variable,': ', round(happy_yeari_value[[1]],2)
+                            ) ### how to specify the labels, what format?
+              ) %>%
+  layout(geo = g) %>% 
+  colorbar(title = 'Happiness index')
+}
+```
+
+
+```{r}
+global_happy_compare(2011,"social_support")
+```
+
+### 191116  ym2771 Add shiny on plot 2
+
+```{r}
+
+
+ui <- shinyUI(fluidPage(
+  titlePanel("relationship plot"),
+  sidebarPanel(
+    selectInput('year', 'Year', sort(unique(as.numeric(happy$year))),
+    selected = "2018"),
+    selectInput('variable', 'Predictor', names(happy)[4:12],
+    selected = "social_support")),
+  mainPanel(
+    plotlyOutput("Plot1")
+  )
+))
+
+
+## instead with world map 
+
+server <- shinyServer(function(input, output) {
+
+  output$Plot1 <- renderPlotly({
+
+    ##plot function
+    p <- global_happy_compare(as.numeric(input$year),as.character(input$variable)) 
+    ## When having 2 data input, we need to put it together? how could we use it separatly?
+    layout(p)
+  })
+})
+shinyApp(ui, server)
+```
+
+
+# Bar plot of Top 15 countries
+```{r}
+
+global_happy_rank <- 
+  function(i,variable){
+  happy_yeari_value = happy_location %>% 
+    filter(year == i) %>% 
+    select(variable,everything())
+  happy_yeari_value %>%
+  mutate(rank = rank(-.[[1]])) %>% 
+  filter(rank <= 15) %>% 
+  mutate(country_name =
+           fct_reorder(country_name,-.[[1]])) %>% 
+  plot_ly(
+  x = ~country_name,
+  y = ~.[[1]],
+  color = ~country_name,
+  type = "bar") 
+}
+
+global_happy_rank(2018,"social_support")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
