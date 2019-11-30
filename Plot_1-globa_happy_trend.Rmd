@@ -120,7 +120,7 @@ shinyApp(ui, server)
 
 
 ## try to add gif(zhazha shuyi)
-```{r}
+```{r,include = F}
 library(magick)
 library(animation)
 #install.packages("rbokeh")
