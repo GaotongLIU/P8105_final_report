@@ -308,27 +308,23 @@ $(document).ready(function () {
 </div>
 
 
-<div id="load-and-tidy-data" class="section level2">
-<h2>Load and tidy data</h2>
 <pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
-<div id="part-1" class="section level3">
-<h3>Part 1</h3>
+<div id="mean-happiness-score-of-all-countries-worldwidecontinentdeveloping-level" class="section level3">
+<h3>Mean Happiness score of all countries: worldwide/continent/developing level</h3>
+<p><img src="description_final_files/figure-html/unnamed-chunk-4-1.png" width="100%" /> We try to find the general trend of mean happiness changed via time by worldwide, regions and developing levels. From the first plot, we can easily find that the mean happiness score changed variously via time, but the overall score changed between 5.0 to 6.0. These changes can be regarded as moderate changes here. From the second plot, we divided these counties in different regions by the geographic continent. Australia has the overall highest and most steady mean happiness score compares to other continents. And Africa has the overall lowest and most fluctuant mean happiness score. From the third plot, we group these countries in developing and developed country by the criteria that Some economists prefer to see a per capita GDP of at least $25,000 to be comfortable declaring a country as developed, however(<a href="https://www.investopedia.com/updates/top-developing-countries/" class="uri">https://www.investopedia.com/updates/top-developing-countries/</a>). The mean happiness score is obviously higher in developed countries than it in developing countries. It is about 6.5 in developed one, and is about 5.0 in developing one.</p>
 </div>
-<div id="mean-happiness-score-of-all-countries-worldwide" class="section level3">
-<h3>Mean Happiness score of all countries: worldwide</h3>
-<p><img src="description_final_files/figure-html/unnamed-chunk-4-1.png" width="100%" /></p>
-</div>
-<div id="part-2" class="section level3">
-<h3>Part 2</h3>
+<div id="the-correlation-plot-for-happiness-score-and-factors-worldwide" class="section level3">
+<h3>The correlation plot for happiness score and factors worldwide:</h3>
 <pre><code>## Warning: Removed 258 rows containing non-finite values (stat_boxplot).</code></pre>
 <pre><code>## Warning: Removed 258 rows containing non-finite values (stat_smooth).</code></pre>
 <pre><code>## Warning: Removed 258 rows containing missing values (geom_point).</code></pre>
 <p><img src="description_final_files/figure-html/unnamed-chunk-5-1.png" width="100%" /><img src="description_final_files/figure-html/unnamed-chunk-5-2.png" width="100%" /></p>
+<p>From the overall worldwide correlation plot for happiness score and factors, except the factors negative_affect and corruption, other factors have the positive association with happiness score, and gdp is the most associated factor. In addition, many factors have associations like gdp and life_expectance.</p>
 </div>
-<div id="part-3" class="section level3">
-<h3>Part 3</h3>
-<p><img src="description_final_files/figure-html/unnamed-chunk-6-1.png" width="100%" /> ### Part 4 <img src="description_final_files/figure-html/developing-1.png" width="100%" /></p>
-</div>
+<div id="the-correlation-plot-for-happiness-score-and-factors-in-different-region" class="section level3">
+<h3>The correlation plot for happiness score and factors in different region:</h3>
+<p><img src="description_final_files/figure-html/unnamed-chunk-6-1.png" width="100%" /> According to the overall trend in mean happiness score, we divide continents in three groups. Compared with the other groups, Australia which has the highest happiness score has the inverse association with factors. Compared with the factor gdp in other two groups, gdp has the negative and non-significant association with outcome, and gdp has the negative and significant association with factor negative-affect. In other two group, the factors freedom, positive_affect, negative_affect,generosity,corruption has less significant association with happiness score, and the other factors has the less significant association with factor corruption in Africa and Asia group. ### The correlation plot for happiness score and factors in developed country and developing country: <img src="description_final_files/figure-html/developing-1.png" width="100%" /></p>
+<p>According to the plot, compared with developed country, life_expectance has the higher association with happiness score in developing country, and freedom, positive_affect, negative_affect,generosity,corruption has less significant association with happiness score. Especially, corruption plays no role in the association with outcome in developing country, but gdp is most associated with outcome.</p>
 </div>
 
 
