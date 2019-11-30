@@ -19,7 +19,7 @@ theme_set(theme_bw() + theme(legend.position = "right"))
 ```
 # manipulate the data
 ```{r}
-data = read_csv("data/final_data.csv") %>%
+data = read_csv("data/final_data_all_country.csv") %>%
   select(country_name:negative_affect) %>%
   unique() %>%
   mutate(gdp = exp(log_gdp_per_capita)) %>%# in the original data, they use log get the result, i try to transfer in the real way
@@ -31,6 +31,7 @@ data  %>%
   mutate(category = factor(category, levels  = c("developed", "developing"))) %>%
   group_by(year, category) %>% 
   summarise(year_mean_score = mean(life_ladder)) %>% 
+  drop_na(category)%>%
   ggplot(aes(x = year, y = year_mean_score, color = category)) +
   geom_point() +
   geom_smooth(method = lm, se = FALSE) +  
@@ -48,6 +49,7 @@ data %>%
 ```{r}
 data %>%
   group_by(year, category) %>%
+  drop_na(category)%>%
   ggplot(aes(x = life_ladder, y = log_gdp_per_capita)) +
   geom_point() +
   geom_smooth(method = lm, color = "red") +
