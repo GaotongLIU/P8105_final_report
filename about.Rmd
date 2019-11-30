@@ -1,9 +1,34 @@
 ---
-title: "About"
+title: "Final report"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
+## Motivation
+Provide an overview of the project goals and motivation.
 
-### About this site
+## Related work: 
 
-Sometimes you need to say a bit about the site -- how it was made, where it's hosted, where the source code can be found. 
+Anything that inspired you, such as a paper, a web site, or something we discussed in class.
 
-If this is for a project or analysis, I recommend giving some details about the R package versions that you used to create the content.
+## Initial questions: 
+
+What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+
+## Data: 
+
+Source, scraping method, cleaning, etc.
+
+## Exploratory analysis: 
+
+Visualizations, summaries, and  exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+
+## Additional analysis: 
+
+If you undertake formal statistical analyses, describe these in detail
+
+## Discussion:
+
+What were your findings? Are they what you expect? What insights into the data can you make?
+
