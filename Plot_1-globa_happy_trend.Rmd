@@ -82,7 +82,6 @@ create a link?
 # Set up API credentials: https://plot.ly/r/getting-started
 chart_link = api_create(p, filename="choropleth-world")
 chart_link
-
 2. with long and lat?
 necessary?
 
@@ -163,6 +162,56 @@ list.files(path = "data/",pattern = "*.jpg",full.names = T) %>%
 
 
 ```
+
+
+### yuqimiao add animation bar to the plot.
+
+```{r}
+Sys.setenv("plotly_username"="miaoyuqi")
+Sys.setenv("plotly_api_key"="jqJ20PtvBRUpOBj2vlxb")
+```
+
+
+```{r}
+# light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+p <- plot_geo(happy) %>%
+  add_trace(
+    z = ~life_ladder, color = ~life_ladder, colors = 'Blues',
+    text = ~label, locations = ~code, marker = list(line = l),frame = ~year
+  ) %>%
+  colorbar(title = 'Happiness index') %>%
+  layout(
+    title = "Global Happiness Index",
+    geo = g
+  )
+p <- api_create(p, filename = "global_animation_plot")
+p
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
