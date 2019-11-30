@@ -30,7 +30,7 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
 
-```{r}
+```{r, warning=FALSE}
 ### rename and select variables
 happy = 
   read_csv("data/final_data_all_country.csv") %>% 
@@ -45,7 +45,7 @@ happy =
   mutate(develop = ifelse(o_gdp > 25000, "developed", "developing")) # actually there is no speicific cretiria to distinguish the developed and developing country.
 ```
 
-```{r}
+```{r,  warning=FALSE}
 ## Creat continent variable
 Asia = 
   c("Israel", "United Arab Emirates", "Singapore", "Thailand", "Taiwan Province of China",
@@ -93,7 +93,7 @@ happy = happy %>%
 ```
 
 
-```{r}
+```{r, warning=FALSE}
 ## Standardaization
 happy_standard = happy %>% 
   mutate(s_gdp = scale(gdp),
@@ -109,7 +109,7 @@ happy_standard = happy %>%
 
  
 ### Mean Happiness score of all countries: worldwide/continent/developing level
-```{r}
+```{r, warning=FALSE}
 plot1 = happy %>% 
   filter(year>2006) %>%
   group_by(year) %>% 
@@ -154,7 +154,7 @@ From the third plot, we group these countries in developing and developed countr
 
 ### The correlation plot for happiness score and factors worldwide:
 
-```{r}
+```{r, warning=FALSE}
 par(mfcol = c(1, 2))
 happy_standard %>% 
   filter(year>2006)%>%
@@ -183,7 +183,7 @@ happy_standard %>%
 From the overall worldwide correlation plot for happiness score and factors, except the factors negative_affect and corruption, other factors have the positive association with happiness score, and gdp is the most associated factor. In addition, many factors have associations like gdp and life_expectance.
 
 ### The correlation plot for happiness score and factors in different region:
-```{r}
+```{r, warning=FALSE}
 
 par(mfcol = c(2, 2))
 happy_standard %>% 
@@ -218,8 +218,10 @@ happy_standard %>%
 
 ```
 According to the overall trend in mean happiness score, we divide continents in three groups. Compared with the other groups, Australia which has the highest happiness score has the inverse association with factors. Compared with the factor gdp in other two groups, gdp has the negative and non-significant association with outcome, and gdp has the negative and significant association with factor negative-affect. In other two group, the factors freedom, positive_affect, negative_affect,generosity,corruption has less significant association with happiness score, and the other factors has the less significant association with factor corruption in Africa and Asia group.
+
 ### The correlation plot for happiness score and factors in developed country and developing country:
-```{r developing}
+
+```{r,  warning=FALSE}
 par(mfcol = c(1, 2))
 happy_standard %>% 
   drop_na() %>%
