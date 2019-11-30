@@ -29,8 +29,8 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 ```
 
-## Load and tidy data
-```{r}
+
+```{r, warning=FALSE}
 ### rename and select variables
 happy = 
   read_csv("data/final_data_all_country.csv") %>% 
@@ -45,7 +45,7 @@ happy =
   mutate(develop = ifelse(o_gdp > 25000, "developed", "developing")) # actually there is no speicific cretiria to distinguish the developed and developing country.
 ```
 
-```{r}
+```{r,  warning=FALSE}
 ## Creat continent variable
 Asia = 
   c("Israel", "United Arab Emirates", "Singapore", "Thailand", "Taiwan Province of China",
@@ -93,7 +93,7 @@ happy = happy %>%
 ```
 
 
-```{r}
+```{r, warning=FALSE}
 ## Standardaization
 happy_standard = happy %>% 
   mutate(s_gdp = scale(gdp),
@@ -107,9 +107,9 @@ happy_standard = happy %>%
   select(-c(gdp:corruption), -o_gdp)
 ```
 
-### Part 1 
-### Mean Happiness score of all countries: worldwide
-```{r}
+ 
+### Mean Happiness score of all countries: worldwide/continent/developing level
+```{r, warning=FALSE}
 plot1 = happy %>% 
   filter(year>2006) %>%
   group_by(year) %>% 
@@ -147,9 +147,14 @@ plot3 = happy %>%
 plot1/plot2/plot3
 
 ```
+We try to find the general trend of mean happiness changed via time by worldwide, regions and developing levels.
+From the first plot, we can easily find that the mean happiness score changed variously via time, but the overall score changed between 5.0 to 6.0. These changes can be regarded as moderate changes here.
+From the second plot, we divided these counties in different regions by the geographic continent. Australia has the overall highest and most steady mean happiness score compares to other continents.  And Africa has the overall lowest and most fluctuant mean happiness score.
+From the third plot, we group these countries in developing and developed country by the criteria that Some economists prefer to see a per capita GDP of at least $25,000 to be comfortable declaring a country as developed, however(https://www.investopedia.com/updates/top-developing-countries/). The mean happiness score is obviously higher in developed countries than it in developing countries. It is about 6.5 in developed one, and is about 5.0 in developing one.
 
-### Part 2
-```{r}
+### The correlation plot for happiness score and factors worldwide:
+
+```{r, warning=FALSE}
 par(mfcol = c(1, 2))
 happy_standard %>% 
   filter(year>2006)%>%
@@ -162,7 +167,7 @@ happy_standard %>%
   geom_boxplot() +  
   geom_smooth(method = lm, color = "red") +
   facet_grid(. ~ standard_factors) +
-  labs(title = "correlation:2007-2018 worldwide")
+  labs(x = "happiness score", y = "standard score", title = "correlation:2007-2018 worldwide")
 
 happy_standard %>% 
   drop_na() %>%
@@ -170,13 +175,15 @@ happy_standard %>%
   select(-c(X1,country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2007-2018 Wordwide",
-                 tl.cex = .7, tl.pos = "lt",
+                 tl.cex = .7, tl.pos = "lt",number.cex=0.7,
                   mar=c(0,0,1,0))
 
 ```
 
-### Part 3
-```{r}
+From the overall worldwide correlation plot for happiness score and factors, except the factors negative_affect and corruption, other factors have the positive association with happiness score, and gdp is the most associated factor. In addition, many factors have associations like gdp and life_expectance.
+
+### The correlation plot for happiness score and factors in different region:
+```{r, warning=FALSE}
 
 par(mfcol = c(2, 2))
 happy_standard %>% 
@@ -186,7 +193,7 @@ happy_standard %>%
   select(-c(X1,country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2007-2018 Australia",
-                 tl.cex = .7, tl.pos = "lt",
+                 tl.cex = .7, tl.pos = "lt",number.cex=0.7,
                   mar=c(0,0,1,0))
 
 happy_standard %>% 
@@ -196,7 +203,7 @@ happy_standard %>%
   select(-c(X1,country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2007-2018 Europe, North America, South America",
-                 tl.cex = .7, tl.pos = "lt",
+                 tl.cex = .7, tl.pos = "lt",number.cex=0.7,
                   mar=c(0,0,1,0))
 
 happy_standard %>% 
@@ -205,13 +212,16 @@ happy_standard %>%
  filter(continent %in% c("Africa", "Asia")) %>% 
   select(-c(X1,country, year, continent, develop)) %>% 
   cor() %>%
-  corrplot.mixed(title = "2007-2018 Africa, Asia",
+  corrplot.mixed(title = "2007-2018 Africa, Asia",number.cex=0.7,
                  tl.cex = .7, tl.pos = "lt",
                   mar=c(0,0,1,0))
 
 ```
-### Part 4
-```{r developing}
+According to the overall trend in mean happiness score, we divide continents in three groups. Compared with the other groups, Australia which has the highest happiness score has the inverse association with factors. Compared with the factor gdp in other two groups, gdp has the negative and non-significant association with outcome, and gdp has the negative and significant association with factor negative-affect. In other two group, the factors freedom, positive_affect, negative_affect,generosity,corruption has less significant association with happiness score, and the other factors has the less significant association with factor corruption in Africa and Asia group.
+
+### The correlation plot for happiness score and factors in developed country and developing country:
+
+```{r,  warning=FALSE}
 par(mfcol = c(1, 2))
 happy_standard %>% 
   drop_na() %>%
@@ -220,7 +230,7 @@ happy_standard %>%
   select(-c(X1, country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2007-2018 developing",
-                 tl.cex = .7, tl.pos = "lt",
+                 tl.cex = .7, tl.pos = "lt",number.cex=0.7,
                   mar=c(0,0,1,0))
 
 happy_standard %>% 
@@ -230,6 +240,8 @@ happy_standard %>%
   select(-c(X1,country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2007-2018 developed",
-                 tl.cex = .7, tl.pos = "lt",
+                 tl.cex = .7, tl.pos = "lt",number.cex=0.7,
                   mar=c(0,0,1,0))
 ```
+
+According to the plot, compared with developed country, life_expectance has the higher association with happiness score in developing country, and freedom, positive_affect, negative_affect,generosity,corruption has less significant association with happiness score. Especially, corruption plays no role in the association with outcome in developing country, but gdp is most associated with outcome.
