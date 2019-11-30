@@ -1,7 +1,7 @@
 ---
-title: "20191117_Descriptive and correlation"
+title: "20191130_description"
 author: "Gaotong LIU"
-date: "11/17/2019"
+date: "11/30/2019"
 output: github_document
 editor_options: 
   chunk_output_type: console
@@ -37,7 +37,9 @@ happy =
          "freedom" = freedom_to_make_life_choices,
          "corruption" = perceptions_of_corruption) %>% 
   select(-c(long, lat)) %>% 
-  unique()
+  unique() %>% 
+  mutate(o_gdp = exp(gdp)) %>%# in the original data, they use log get the result, i try to transfer in the real way
+  mutate(develop = ifelse(o_gdp > 25000, "developed", "developing")) # actually there is no speicific cretiria to distinguish the developed and developing country.
 ```
 
 ```{r}
@@ -98,7 +100,7 @@ happy_standard = happy %>%
          s_negative_affect = scale(negative_affect),
          s_generosity  = scale(generosity),
          s_corruption  = scale(corruption)) %>%
-  select(-c(gdp:corruption))
+  select(-c(gdp:corruption), -o_gdp)
 ```
 
 ## Happiness score change over time
@@ -109,6 +111,13 @@ happy %>%
   summarise(year_mean_score = mean(happiness_score)) %>% 
   ggplot(aes(x = year, y = year_mean_score)) +
   geom_path() +
+  labs(title = "happiness: 2011-2018 worldwide")
+## Boxplot
+happy %>% 
+  group_by(year) %>% 
+  ggplot(aes(x = year, y = happiness_score)) +
+  geom_point(aes(group = year, color = year)) + 
+  geom_boxplot(aes(group = year, color = year)) + 
   labs(title = "happiness: 2011-2018 worldwide")
 ```
 
@@ -126,6 +135,29 @@ happy %>%
   labs(title = "happiness: 2011-2018 region")
 ```
 
+```{r}
+happy %>% 
+  group_by(year, develop) %>% 
+  summarise(year_mean_score = mean(happiness_score)) %>% 
+  ggplot(aes(x = year, y = year_mean_score, color = year)) +
+  geom_point() +
+  geom_line() +
+  geom_smooth(method = lm, size  = 0.5, 
+              se = FALSE, color = "red") +  
+  facet_grid(. ~ develop) +
+  labs(title = "happiness: 2011-2018 develop")
+## Boxplot
+happy %>% 
+  group_by(year, develop) %>%
+  ggplot(aes(x = year, y = happiness_score,
+             group = develop, color = develop)) +
+  geom_point(aes(group = year, color = year)) +
+  geom_boxplot(aes(group = year, color = year)) +
+  geom_smooth(method = lm, size  = 0.5, 
+              se = FALSE, color = "red") +  
+  facet_grid(. ~ develop) +
+  labs(title = "happiness: 2011-2018 develop")
+```
 ## other factors change over time
 ```{r}
 ## 2011-2018 Worldwide
@@ -179,6 +211,58 @@ happy_standard %>%
   labs(title = "others: 2011-2018 region")
 ```
 
+```{r}
+## 2011-2018 region
+happy_standard %>% 
+  group_by(year, continent) %>% 
+ summarise(mean_gdp = mean(s_gdp),
+            mean_social_support = mean(s_social_support),
+            mean_life_expectance = mean(s_life_expectance),
+            mean_freedom = mean(s_freedom),
+            mean_positive_affect = mean(s_positive_affect),
+            mean_negative_affect = mean(s_negative_affect),
+            mean_generosity  = mean(s_generosity),
+            mean_corruption  = mean(s_corruption)) %>%
+  pivot_longer(mean_gdp:mean_corruption,
+               names_to = "factors",
+               values_to = "mean_s",
+               names_prefix = "mean_"
+               ) %>% 
+  ggplot(aes(x = year, y = mean_s, color = factors)) +
+  geom_point(alpha = .7) +
+  geom_boxplot() +
+  geom_smooth(method = lm, se = FALSE, 
+              color =  "red", size = .5) +  
+  facet_grid(continent ~ factors) +
+  labs(title = "others: 2011-2018 region")
+```
+
+```{r}
+## 2011-2018 develop
+happy_standard %>% 
+  group_by(year, develop) %>% 
+ summarise(mean_gdp = mean(s_gdp),
+            mean_social_support = mean(s_social_support),
+            mean_life_expectance = mean(s_life_expectance),
+            mean_freedom = mean(s_freedom),
+            mean_positive_affect = mean(s_positive_affect),
+            mean_negative_affect = mean(s_negative_affect),
+            mean_generosity  = mean(s_generosity),
+            mean_corruption  = mean(s_corruption)) %>%
+  pivot_longer(mean_gdp:mean_corruption,
+               names_to = "factors",
+               values_to = "mean_s",
+               names_prefix = "mean_"
+               ) %>% 
+  ggplot(aes(x = year, y = mean_s, color = factors)) +
+  geom_point(alpha = .7) +
+  geom_boxplot() +
+  geom_smooth(method = lm, se = FALSE, 
+              color =  "red", size = .5) +  
+  facet_grid(develop ~ factors) +
+  labs(title = "others: 2011-2018 develop")
+```
+
 *  The other factors change over time **Not** meaningful for region
 
 ## Correlation of happiness and other factors
@@ -209,21 +293,36 @@ happy_standard %>%
   geom_boxplot() +  
   geom_smooth(method = lm, color = "red") +
   facet_grid(continent ~ standard_factors) +
-  labs(title = "correlation:2011-2018 worldwide")
+  labs(title = "correlation:2011-2018 region")
+```
+
+### Scaterplot and box plot with smooth: develop
+```{r}
+happy_standard %>% 
+  pivot_longer(s_gdp:s_corruption,
+               names_to = "standard_factors",
+               values_to = "standard_value") %>% 
+  ggplot(aes(x = happiness_score, y = standard_value,
+             color  = standard_factors)) +
+  geom_point() +
+  geom_boxplot() +  
+  geom_smooth(method = lm, color = "red") +
+  facet_grid(develop ~ standard_factors) +
+  labs(title = "correlation:2011-2018 develop")
 ```
 *  Correlation  **Not** meaningful for region
 
 ### Correlation plot: Worldwide
 ```{r}
 happy_standard %>% 
-  select(-c(country, year, continent)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2011-2018 Wordwide",
                  tl.cex = .7, tl.pos = "lt",
                   mar=c(0,0,1,0))
 
 happy_standard %>% 
-  select(-c(country, year, continent)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot(method = 'square', type = "upper",
          title = "2011-2018 Wordwide",
@@ -235,7 +334,7 @@ happy_standard %>%
 ```{r}
 happy_standard %>% 
   filter(continent == "Australia") %>% 
-  select(-c(country, year, continent)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2011-2018 Australia",
                  tl.cex = .7, tl.pos = "lt",
@@ -243,7 +342,7 @@ happy_standard %>%
 
 happy_standard %>% 
   filter(continent %in% c("Europe", "North America", "South America"))  %>% 
-  select(-c(country, year, continent)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2011-2018 Europe, North America, South America",
                  tl.cex = .7, tl.pos = "lt",
@@ -251,13 +350,33 @@ happy_standard %>%
 
 happy_standard %>% 
  filter(continent %in% c("Africa", "Asia")) %>% 
-  select(-c(country, year, continent)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "2011-2018 Africa, Asia",
                  tl.cex = .7, tl.pos = "lt",
                   mar=c(0,0,1,0))
 ```
 
+### Correlation plot: develop
+```{r developing}
+happy_standard %>% 
+  filter(develop == "developing") %>% 
+  select(-c(country, year, continent, develop)) %>% 
+  cor() %>%
+  corrplot.mixed(title = "2011-2018 developing",
+                 tl.cex = .7, tl.pos = "lt",
+                  mar=c(0,0,1,0))
+```
+
+```{r developed}
+happy_standard %>% 
+  filter(develop == "developed") %>% 
+  select(-c(country, year, continent, develop)) %>% 
+  cor() %>%
+  corrplot.mixed(title = "2011-2018 developed",
+                 tl.cex = .7, tl.pos = "lt",
+                  mar=c(0,0,1,0))
+```
 * Different continent the strength of correlation is different,
 Australia: freedom, social support
 
