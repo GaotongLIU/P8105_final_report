@@ -184,7 +184,6 @@ From the overall worldwide correlation plot for happiness score and factors, exc
 
 ### The correlation plot for happiness score and factors in different region:
 ```{r, warning=FALSE}
-
 par(mfcol = c(2, 2))
 happy_standard %>% 
   drop_na() %>%
@@ -245,3 +244,31 @@ happy_standard %>%
 ```
 
 According to the plot, compared with developed country, life_expectance has the higher association with happiness score in developing country, and freedom, positive_affect, negative_affect,generosity,corruption has less significant association with happiness score. Especially, corruption plays no role in the association with outcome in developing country, but gdp is most associated with outcome.
+
+### Statistical Analysis:
+
+```{r}
+data =  happy %>% 
+  mutate(develop = as.factor(develop),
+         continent = as.factor(continent)) %>%
+  select(-c(country, year, o_gdp))
+fit4 = lm(happiness_score ~
+            freedom + 
+            negative_affect + 
+            generosity + 
+            life_expectance + 
+            positive_affect + 
+            corruption*develop + 
+            social_support*develop, data = data)
+summary(fit4)
+
+fit5 = lm(happiness_score ~
+            gdp+
+            social_support+
+            freedom + 
+            negative_affect + 
+            generosity + 
+            life_expectance + 
+            positive_affect, data = data) 
+summary(fit5)
+```

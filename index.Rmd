@@ -1,7 +1,82 @@
 ---
 title: "What makes the world happy?"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: console
 ---
 
+Authors: Yuqi Miao (ym2771), Yuao Yang(yy3020), Ruoyuan Qian(rq2166), Shuyi Shen(ss5929), Gaotong Liu(gl2677)
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+## setup
+library(plotly)
+library(shiny)
+library(tidyverse)
+library(rworldmap)
+library(arsenal)
+library(leaflet)
+library(rworldmap) 
+library(countrycode)  # Gets country code 
+library(viridis)
+## Load code
+happy = read_csv("data/final_data_all_country.csv") %>% 
+  janitor::clean_names() %>% 
+  unique %>% 
+  mutate(label = str_c("<b>Happiness: ", round(life_ladder,2), 
+                      "</b><br>Country : ", country_name,
+                      sep = ""),
+        code = countrycode(country_name, 'country.name', 'iso3c'),## match code
+        code = replace_na(code,"XKX"))
+
+Sys.setenv("plotly_username"="miaoyuqi")
+Sys.setenv("plotly_api_key"="jqJ20PtvBRUpOBj2vlxb")
+# light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+p <- plot_geo(happy) %>%
+  add_trace(
+    z = ~life_ladder, color = ~life_ladder, colors = 'Blues',
+    text = ~label, locations = ~code, marker = list(line = l),frame = ~year
+  ) %>%
+  colorbar(title = 'Happiness index') %>%
+  layout(
+    title = "Global Happiness Index",
+    geo = g
+  )
+p <- api_create(p, filename = "global_animation_plot")
+p
+```
+
+## Motivation
+As civilizations are developing, the happiness of human being becomes an ambiguous topic.  Simple material enjoyment is no longer the only determinant of mental pleasure. So, how the state of happiness in the world change overtime and what makes the world happy? We are trying to find the reasons, and our final goal is to provide helpful information for governments to make better decisions with respect to higher life evaluation.  
+
+## Data Source
+The information was gathered from a single direct primary source: The World Happiness Report created by the United Nations Sustainable Development Solutions Network [(UNSDSN)](https://worldhappiness.report/). It is an annual landmark survey of the state of global happiness that ranks 156 countries by how happy their citizens perceive themselves to be. The dataset we use contains rankings of national happiness together with various life factors correlated from 2007 to 2018.
+The detailed description of data souce and tidy process can be found [here](data.html)
+
+## Overall analysis
+
+* Associaiton Map: the worldwide association between different factor and happiness score in different country and different year
+* Global animation Map: the changed worldwide happiness score via time changing
+* Correlation analysis: analyses the correlations between happiness score and interested factors, and internal correlations in factors in different situations
+* Multiple Linear Regression:explores the associations between interested factors and happiness score
+
+## Conclusion
+
+From the dataset and analysis for worldwide level, except the factor negative_affect, all of our interested factors have associations with happiness score. The top two factors are positive_affect and social_support. In addition, many factors corelated with each other like gdp and life_expectance, freedom and positive_affect.
+However, the associations change variably in different situations like different level of development, different continents.
+
+For more details , click by [report](about.html).
+
+## Screencast
 
 
-And I can put all kinds of stuff on it!
+

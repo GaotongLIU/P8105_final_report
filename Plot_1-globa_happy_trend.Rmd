@@ -6,6 +6,8 @@ output:
   html_document:
     toc: true
     toc_float: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r}
@@ -120,7 +122,7 @@ shinyApp(ui, server)
 
 
 ## try to add gif(zhazha shuyi)
-```{r}
+```{r,include = F}
 library(magick)
 library(animation)
 #install.packages("rbokeh")

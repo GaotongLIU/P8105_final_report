@@ -1,13 +1,20 @@
 name: "Yay internet!"
 output_dir: "."
 navbar:
-  title: "Home"
+  title: "Project Home"
   right:
-    - text: "About"
+    - text: "Final report"
       href: about.html
+    - text: "Data"
+      href: data.html
+    - text: "Associaiton Map"
+      href: flex_dashboard.html
+    - text: "Global Animation Map"
+      href: global_animation_plot.html
     - icon: fa-envelope fa-lg
-      href: mailto:<you@youremail.com>
+      href: mailto:<gl2677@cumc.columbia.edu>
     - icon: fa-github fa-lg
-      href: http://github.com/<YOUR_GH_NAME>/
+      href: https://github.com/GaotongLIU/P8105_final_report.io.git
 output:
-  html_document
+  html_document:
+    theme: journal
