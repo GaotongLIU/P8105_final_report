@@ -66,6 +66,7 @@ The detailed description of data souce and tidy process can be found [here](data
 
 * Associaiton Map: the worldwide association between different factor and happiness score in different country and different year
 * Global animation Map: the changed worldwide happiness score via time changing
+* Correlation analysis: analyses the correlations between happiness score and interested factors, and internal correlations in factors in different situations
 * Multiple Linear Regression:explores the associations between interested factors and happiness score
 
 ## Conclusion
