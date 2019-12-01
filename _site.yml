@@ -8,7 +8,7 @@ navbar:
     - text: "Data"
       href: data.html
     - text: "Associaiton Map"
-      href: flex_dashboard.html
+      href: https://yuqimiao.shinyapps.io/Gaotong/
     - text: "Global Animation Map"
       href: global_animation_plot.html
     - icon: fa-envelope fa-lg
