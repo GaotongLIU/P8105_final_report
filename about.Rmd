@@ -6,15 +6,20 @@ output:
     toc_float: true
 ---
 ## Motivation
-Provide an overview of the project goals and motivation.
+
+Aristotle once said, “Happiness is the meaning and purpose of life.” However, as civilizations are developing, the happiness of human being becomes an ambiguous topic. Simple material enjoyment is no longer the only determinant of mental pleasure. Therefore, we wonder how the state of happiness in the world change overtime and what makes the world happy? For this purpose, 165 countries, 12 years from 2008 to 2018 and 8 factors about happiness are included in our analysis. 
 
 ## Related work: 
 
-Anything that inspired you, such as a paper, a web site, or something we discussed in class.
+Our common interest on happiness around the world and appropriate dataset online make us choose this topic. 
 
 ## Initial questions: 
 
-What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+We sought to see the general trend of happiness, indicating by life ladder, over recent years of each country around the world. We were also interested in examining influential factors on happiness  and the strength of their association. In addition, during the process of analysis, we found stratification might help the analysis and therefore, countries were divided into the developing and developed. As such, our questions were as follows:
+
+* What are the influential factors on happiness? How can we visualize these correlations?
+* How does happiness change in each country over recent years?
+* If the association differs among developing and developed countries?
 
 ## Data: 
 
