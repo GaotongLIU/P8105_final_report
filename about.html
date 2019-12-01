@@ -365,7 +365,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://github.com/GaotongLIU/GaotongLIU.github.io.git">
+  <a href="https://github.com/GaotongLIU/P8105_final_report.io.git">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -386,31 +386,163 @@ div.tocify {
 
 <div id="motivation" class="section level2">
 <h2>Motivation</h2>
-<p>Provide an overview of the project goals and motivation.</p>
+<p>Aristotle once said, “Happiness is the meaning and purpose of life.” However, as civilizations are developing, the happiness of human being becomes an ambiguous topic. Simple material enjoyment is no longer the only determinant of mental pleasure. Therefore, we wonder how the state of happiness in the world change overtime and what makes the world happy? For this purpose, 165 countries, 12 years from 2008 to 2018 and 8 factors about happiness are included in our analysis.</p>
 </div>
 <div id="related-work" class="section level2">
 <h2>Related work:</h2>
-<p>Anything that inspired you, such as a paper, a web site, or something we discussed in class.</p>
+<p>Our common interest on happiness around the world and appropriate dataset online make us choose this topic.</p>
 </div>
 <div id="initial-questions" class="section level2">
 <h2>Initial questions:</h2>
-<p>What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?</p>
+<p>We sought to see the general trend of happiness, indicating by life ladder, over recent years of each country around the world. We were also interested in examining influential factors on happiness and the strength of their association. In addition, during the process of analysis, we found stratification might help the analysis and therefore, countries were divided into the developing and developed. As such, our questions were as follows:</p>
+<ul>
+<li>What are the influential factors on happiness? How can we visualize these correlations?</li>
+<li>How does happiness change in each country over recent years?</li>
+<li>If the association differs among developing and developed countries?</li>
+</ul>
 </div>
 <div id="data" class="section level2">
 <h2>Data:</h2>
-<p>Source, scraping method, cleaning, etc.</p>
+<p>In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some <a href="https://www.investopedia.com/updates/top-developing-countries/">economists</a> prefer to see a country with per capita GDP of at least $25,000 to be declared as developed.</p>
+<p>We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents.</p>
+<p>To better show the association of other factors and happiness score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of <code>gdp</code> and <code>life_expectancy</code> are dramatically different from other factors.</p>
 </div>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis:</h2>
-<p>Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.</p>
+<div id="happiness-score-of-all-countries-changes-over-time-worldwidecontinentdeveloping-level" class="section level3">
+<h3>Happiness score of all countries changes over time: worldwide/continent/developing level</h3>
+<p><img src="about_files/figure-html/unnamed-chunk-1-1.png" width="100%" /></p>
+<p>We firstly explore the changes of happiness score over time worldwide, by continents and by developing levels.</p>
+<ul>
+<li><p>From the first plot, we can easily find that the mean happiness score increases from 2007 to 2010, and gradually decreases to the lowest point in 2014. Finally, it increases in the recent years. 2014, 2018</p></li>
+<li><p>From the second plot, we divide these countries into different regions by the geographic continent. Australia has the overall highest and Africa has the overall lowest happiness score. Only Europe and Asia show the general increasing trend of happiness score over time.</p></li>
+<li><p>We can roughly further divide these continents into three groups base on the happiness scores. The high happiness score group contains Australis, the medium happiness score group contains Europe, North America and South America, and the low happiness score group contains Africa and Asia.</p></li>
+<li><p>From the third plot, the mean happiness score is obviously higher in developed countries than it in developing countries.</p></li>
+</ul>
 </div>
-<div id="additional-analysis" class="section level2">
-<h2>Additional analysis:</h2>
-<p>If you undertake formal statistical analyses, describe these in detail</p>
+<div id="the-correlation-plot-for-happiness-score-and-other-factors-worldwide" class="section level3">
+<h3>The correlation plot for happiness score and other factors: worldwide</h3>
+<p><img src="about_files/figure-html/unnamed-chunk-2-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-2-2.png" width="50%" /></p>
+<ul>
+<li><p>From the scatterplot, the factors <code>negative_affect</code> and <code>corruption</code> have the negative association with happiness score, but <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>generosity</code> have the positive association.</p></li>
+<li><p>From the correlation matrix plot, the happiness score is highly associated with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(&gt; 0.7). In addition, <code>gdp</code> and <code>life_expctancy</code> are highly correlated with each other(&gt; 0.7).</p></li>
+</ul>
 </div>
-<div id="discussion" class="section level2">
-<h2>Discussion:</h2>
+<div id="the-correlation-plot-for-happiness-score-and-other-factors-in-different-region" class="section level3">
+<h3>The correlation plot for happiness score and other factors in different region:</h3>
+<p><img src="about_files/figure-html/unnamed-chunk-3-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-3-2.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-3-3.png" width="50%" /></p>
+<ul>
+<li><p>Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). <code>gdp</code> is strongly positively associated with <code>corruption</code>(0.69) and negatively assoicated with <code>positive_affe t</code>(-0.86)</p></li>
+<li><p>Europe, North America, South America have the medium happiness score, and the score has moderate correlation with <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>corruption</code>(0.6 - 0.7)</p></li>
+<li><p>Africa and Asia have the lowest happiness score, and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(0.6 - 0.7).</p></li>
+</ul>
+</div>
+<div id="the-correlation-plot-for-happiness-score-and-othe-factors-in-developed-country-and-developing-country" class="section level3">
+<h3>The correlation plot for happiness score and othe factors in developed country and developing country:</h3>
+<p><img src="about_files/figure-html/unnamed-chunk-4-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-4-2.png" width="50%" /></p>
+<ul>
+<li><p>Developing coountries have lower happiness score , and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(around 0.6).</p></li>
+<li><p>Developed coountries have higher happiness score , and the score has moderate correlation with <code>social support</code>,<code>freedom</code>, <code>positive_affect</code>, <code>negative_affect</code>, <code>generosity</code> and <code>corruption</code> (around 0.6)</p></li>
+</ul>
+</div>
+</div>
+<div id="statistical-analysis" class="section level2">
+<h2>Statistical Analysis:</h2>
+<div id="multiple-linear-regression" class="section level3">
+<h3>Multiple Linear Regression</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-4.352</td>
+<td align="right">0.684</td>
+<td align="right">-6.362</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">freedom</td>
+<td align="right">0.216</td>
+<td align="right">0.143</td>
+<td align="right">1.511</td>
+<td align="right">0.131</td>
+</tr>
+<tr class="odd">
+<td align="left">negative_affect</td>
+<td align="right">0.160</td>
+<td align="right">0.203</td>
+<td align="right">0.788</td>
+<td align="right">0.431</td>
+</tr>
+<tr class="even">
+<td align="left">generosity</td>
+<td align="right">-0.112</td>
+<td align="right">0.105</td>
+<td align="right">-1.069</td>
+<td align="right">0.285</td>
+</tr>
+<tr class="odd">
+<td align="left">life_expectance</td>
+<td align="right">0.054</td>
+<td align="right">0.003</td>
+<td align="right">19.635</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">positive_affect</td>
+<td align="right">2.327</td>
+<td align="right">0.189</td>
+<td align="right">12.295</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">corruption</td>
+<td align="right">-0.741</td>
+<td align="right">0.131</td>
+<td align="right">-5.638</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">developdeveloping</td>
+<td align="right">2.450</td>
+<td align="right">0.679</td>
+<td align="right">3.609</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">social_support</td>
+<td align="right">6.169</td>
+<td align="right">0.687</td>
+<td align="right">8.986</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">corruption:developdeveloping</td>
+<td align="right">0.935</td>
+<td align="right">0.195</td>
+<td align="right">4.807</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">developdeveloping:social_support</td>
+<td align="right">-4.039</td>
+<td align="right">0.705</td>
+<td align="right">-5.732</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<p>According to the ## Discussion:</p>
 <p>What were your findings? Are they what you expect? What insights into the data can you make?</p>
+</div>
 </div>
 
 
