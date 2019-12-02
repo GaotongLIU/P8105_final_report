@@ -66,7 +66,7 @@ missing_number = map(data_all,sum_na) %>%
 
 final_data = 
   data_all %>% 
-  select(country_name:freedom_to_make_life_choices,positive_affect,negative_affect)
+  select(country_name:negative_affect)
 
 write.csv(final_data,file="data/final_data_all_country.csv",quote=F,row.names = F)
 ```
@@ -234,7 +234,7 @@ happy_standard %>%
 happy_standard %>% 
   drop_na() %>%
    filter(year > 2006) %>%
-  select(-c(X1,country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "Happiness score against other factors worldwide: 2007-2018",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
@@ -251,7 +251,7 @@ happy_standard %>%
   drop_na() %>%
    filter(year>2006)%>%
   filter(continent == "Australia") %>% 
-  select(-c(X1,country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "Australia: 2007-2018",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
@@ -261,7 +261,7 @@ happy_standard %>%
   drop_na() %>%
    filter(year>2006)%>%
   filter(continent %in% c("Europe", "North America", "South America"))  %>% 
-  select(-c(X1,country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "Europe, North America, South America: 2007-2018",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
@@ -271,7 +271,7 @@ happy_standard %>%
   drop_na() %>%
    filter(year > 2006) %>%
  filter(continent %in% c("Africa", "Asia")) %>% 
-  select(-c(X1,country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "Africa, Asia: 2007-2018 ",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
@@ -292,7 +292,7 @@ happy_standard %>%
   drop_na() %>%
    filter(year>2006)%>%
   filter(develop == "developing") %>% 
-  select(-c(X1, country, year, continent, develop)) %>% 
+  select(-c( country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "Developing: 2007-2018",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
@@ -302,7 +302,7 @@ happy_standard %>%
   drop_na() %>%
    filter(year>2006)%>%
   filter(develop == "developed") %>% 
-  select(-c(X1,country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "Developed: 2007-2018",
                   tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
