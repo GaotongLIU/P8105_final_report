@@ -1,4 +1,4 @@
----
+       ---
 title: "Final report"
 output: 
   html_document:
@@ -22,10 +22,14 @@ We sought to see the general trend of happiness, indicating by life ladder, over
 * If the association differs among developing and developed countries?
 
 ## Data: 
+
 ```{r setup, include=FALSE}
 library(tidyverse) ## Data Manipulaion
 library(corrplot) ## Correlation plot
 library(patchwork)
+library(readxl)
+library(tidyverse)
+library(dplyr)
 
 knitr::opts_chunk$set(
   fig.width = 8,
@@ -43,6 +47,31 @@ scale_fill_discrete = scale_fill_viridis_d
 
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
+
+
+```{r}
+data_all = read_excel("./data/WHR.xls")%>% 
+ janitor::clean_names() 
+```
+
+We first save the crude dataset as ".xls" format from the website and read it into R and call it `data_all`. The crude data includes 1704 observations and 26 variables.
+
+```{r }
+sum_na = function(x){
+  sum = sum(is.na(x))
+  sum}
+
+missing_number = map(data_all,sum_na) %>% 
+  as.data.frame()  
+
+final_data = 
+  data_all %>% 
+  select(country_name:freedom_to_make_life_choices,positive_affect,negative_affect)
+
+write.csv(final_data,file="data/final_data_all_country.csv",quote=F,row.names = F)
+```
+
+After reviewing the whole dataset through checking the missing values in each variable, we decide to keep variables with the number of missing values less than 100. Finally we obtain 11 variables with 1704 observations without deleting any misssing values. Then we write the new tidyed data as `final_data_all_country.csv`, which is implemented for all the following works.
 
 ```{r rename develop, warning=FALSE}
 happy = 
