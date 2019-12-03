@@ -665,7 +665,7 @@ plot1/plot2/plot3</code></pre>
 <h3><strong>The correlation plot for happiness score and other factors: worldwide</strong></h3>
 <ul>
 <li><p>From the scatterplot, the factors <code>negative_affect</code> and <code>corruption</code> have the negative association with happiness score, but <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>generosity</code> have the positive association.</p></li>
-<li><p>From the correlation matrix plot, the happiness score is highly associated with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(&gt; 0.7). In addition, <code>gdp</code> and <code>life_expctancy</code> are highly correlated with each other(&gt; 0.7).</p></li>
+<li><p>From the correlation matrix plot, the happiness score is highly associated with <code>gdp</code>, <code>social_support</code> and <code>life_expectancy</code>(&gt; 0.7). In addition, <code>gdp</code> and <code>life_expctancy</code> are highly correlated with each other(&gt; 0.7).</p></li>
 </ul>
 <pre class="r"><code>happy_standard %&gt;% 
   pivot_longer(s_gdp:s_corruption,
@@ -682,9 +682,9 @@ plot1/plot2/plot3</code></pre>
        title = &quot;Happiness score against other factors worldwide: 2007-2018&quot;) + 
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
-<pre class="r"><code>happy_standard %&gt;% 
+<pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
-  select(-c(country, year, continent, develop)) %&gt;% 
+  select(-c(country, year, continent, develop,o_gdp)) %&gt;% 
   cor() %&gt;%
   corrplot.mixed(title = &quot;Happiness score against other factors worldwide: 2007-2018&quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
@@ -698,28 +698,28 @@ plot1/plot2/plot3</code></pre>
 <li><p>Europe, North America, South America have the medium happiness score, and the score has moderate correlation with <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>corruption</code>(0.6 - 0.7)</p></li>
 <li><p>Africa and Asia have the lowest happiness score, and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(0.6 - 0.7).</p></li>
 </ul>
-<pre class="r"><code>happy_standard %&gt;% 
+<pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
   filter(continent == &quot;Australia&quot;) %&gt;% 
-  select(-c(country, year, continent, develop)) %&gt;% 
+  select(-c(country, year, continent, develop,o_gdp)) %&gt;% 
   cor() %&gt;%
   corrplot.mixed(title = &quot;Australia: 2007-2018&quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar=c(0,0,1,0))</code></pre>
 <p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
-<pre class="r"><code>happy_standard %&gt;% 
+<pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
   filter(continent %in% c(&quot;Europe&quot;, &quot;North America&quot;, &quot;South America&quot;))  %&gt;% 
-  select(-c(country, year, continent, develop)) %&gt;% 
+  select(-c(country, year, continent, develop,o_gdp)) %&gt;% 
   cor() %&gt;%
   corrplot.mixed(title = &quot;Europe, North America, South America: 2007-2018&quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar = c(0,0,1,0))</code></pre>
 <p><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="50%" /></p>
-<pre class="r"><code>happy_standard %&gt;% 
+<pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
  filter(continent %in% c(&quot;Africa&quot;, &quot;Asia&quot;)) %&gt;% 
-  select(-c(country, year, continent, develop)) %&gt;% 
+  select(-c(country, year, continent, develop,o_gdp)) %&gt;% 
   cor() %&gt;%
   corrplot.mixed(title = &quot;Africa, Asia: 2007-2018 &quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
@@ -732,19 +732,19 @@ plot1/plot2/plot3</code></pre>
 <li><p>Developing coountries have lower happiness score , and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(around 0.6).</p></li>
 <li><p>Developed coountries have higher happiness score , and the score has moderate correlation with <code>social support</code>,<code>freedom</code>, <code>positive_affect</code>, <code>negative_affect</code>, <code>generosity</code> and <code>corruption</code> (around 0.6)</p></li>
 </ul>
-<pre class="r"><code>happy_standard %&gt;% 
+<pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
   filter(develop == &quot;developing&quot;) %&gt;% 
-  select(-c( country, year, continent, develop)) %&gt;% 
+  select(-c( country, year, continent, develop,o_gdp)) %&gt;% 
   cor() %&gt;%
   corrplot.mixed(title = &quot;Developing: 2007-2018&quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar=c(0,0,1,0))</code></pre>
 <p><img src="about_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
-<pre class="r"><code>happy_standard %&gt;% 
+<pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
   filter(develop == &quot;developed&quot;) %&gt;% 
-  select(-c(country, year, continent, develop)) %&gt;% 
+  select(-c(country, year, continent, develop,o_gdp)) %&gt;% 
   cor() %&gt;%
   corrplot.mixed(title = &quot;Developed: 2007-2018&quot;,
                   tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,

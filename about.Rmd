@@ -345,7 +345,7 @@ plot1/plot2/plot3
 
 * From the scatterplot, the factors `negative_affect` and `corruption` have the negative association with happiness score, but `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `generosity` have the positive association.
 
-* From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
+* From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social_support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
 
 ```{r, warning=FALSE, out.width = "50%"}
 happy_standard %>% 
@@ -363,9 +363,9 @@ happy_standard %>%
        title = "Happiness score against other factors worldwide: 2007-2018") + 
   theme(legend.position = "none")
 
-happy_standard %>% 
+happy %>% 
   drop_na() %>%
-  select(-c(country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop,o_gdp)) %>% 
   cor() %>%
   corrplot.mixed(title = "Happiness score against other factors worldwide: 2007-2018",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
@@ -381,28 +381,28 @@ happy_standard %>%
 * Africa and Asia have the lowest happiness score,  and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
 
 ```{r, warning=FALSE, out.width = "50%"}
-happy_standard %>% 
+happy %>% 
   drop_na() %>%
   filter(continent == "Australia") %>% 
-  select(-c(country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop,o_gdp)) %>% 
   cor() %>%
   corrplot.mixed(title = "Australia: 2007-2018",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
                   mar=c(0,0,1,0))
 
-happy_standard %>% 
+happy %>% 
   drop_na() %>%
   filter(continent %in% c("Europe", "North America", "South America"))  %>% 
-  select(-c(country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop,o_gdp)) %>% 
   cor() %>%
   corrplot.mixed(title = "Europe, North America, South America: 2007-2018",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
                   mar = c(0,0,1,0))
 
-happy_standard %>% 
+happy %>% 
   drop_na() %>%
  filter(continent %in% c("Africa", "Asia")) %>% 
-  select(-c(country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop,o_gdp)) %>% 
   cor() %>%
   corrplot.mixed(title = "Africa, Asia: 2007-2018 ",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
@@ -419,19 +419,19 @@ happy_standard %>%
 * Developed coountries have higher happiness score , and the score has moderate correlation with `social support`,`freedom`, `positive_affect`, `negative_affect`, `generosity` and `corruption` (around 0.6)
 
 ```{r,  warning=FALSE, out.width = "50%"}
-happy_standard %>% 
+happy %>% 
   drop_na() %>%
   filter(develop == "developing") %>% 
-  select(-c( country, year, continent, develop)) %>% 
+  select(-c( country, year, continent, develop,o_gdp)) %>% 
   cor() %>%
   corrplot.mixed(title = "Developing: 2007-2018",
                  tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
                   mar=c(0,0,1,0))
 
-happy_standard %>% 
+happy %>% 
   drop_na() %>%
   filter(develop == "developed") %>% 
-  select(-c(country, year, continent, develop)) %>% 
+  select(-c(country, year, continent, develop,o_gdp)) %>% 
   cor() %>%
   corrplot.mixed(title = "Developed: 2007-2018",
                   tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
