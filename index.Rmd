@@ -1,14 +1,26 @@
 ---
-title: "What makes the world happy?"
-output: 
-  html_document:
-    toc: true
-    toc_float: true
+title: "***What makes the world happy?***"
+author: "*Yuqi Miao, Yuao Yang, Ruoyuan Qian, Shuyi Shen, Gaotong Liu*"
 editor_options: 
   chunk_output_type: console
 ---
+<style type = "text/css">
 
-Authors: Yuqi Miao (ym2771), Yuao Yang(yy3020), Ruoyuan Qian(rq2166), Shuyi Shen(ss5929), Gaotong Liu(gl2677)
+body{ /* Normal */
+    font-size: 14px;
+    color: black;
+}
+h1.title {
+font-size: 50px;
+color: darkred;
+
+}
+h2{ /* Header 2 */
+font-size: 22px;
+color: black;
+}
+</style>
+
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ## setup
