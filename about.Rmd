@@ -48,6 +48,10 @@ We sought to see the general trend of happiness, indicating by life ladder, over
 
 ## Data 
 
+### Loading and tidying data
+
+We first save the crude dataset as "`.xls`" format from the website and read it into R and call it `data_all`. The crude data includes 1704 observations and 26 variables from 2005-2018 years, 165 countries.
+
 ```{r setup, include=FALSE}
 library(tidyverse) ## Data Manipulaion
 library(corrplot) ## Correlation plot
@@ -55,6 +59,8 @@ library(patchwork)
 library(readxl)
 library(tidyverse)
 library(dplyr)
+library(countrycode)  # Gets country code 
+
 
 knitr::opts_chunk$set(
   fig.width = 8,
@@ -74,14 +80,16 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
 
-```{r}
+```{r ,warning=FALSE}
 data_all = read_excel("./data/WHR.xls")%>% 
  janitor::clean_names() 
 ```
 
-We first save the crude dataset as ".xls" format from the website and read it into R and call it `data_all`. The crude data includes 1704 observations and 26 variables.
+After reviewing the whole dataset through checking the missing values in each variable and in each year, we decide to keep variables with the number of missing values less than 100 and observations from 2007-2018.
 
-```{r }
+Finally we obtain 11 variables with 1588 observations from 164 countries without deleting any misssing values. Then we write the new tidyed data as `final_data_all_country.csv`, which is implemented for all the following works.
+
+```{r ,warning=FALSE}
 sum_na = function(x){
   sum = sum(is.na(x))
   sum}
@@ -91,12 +99,15 @@ missing_number = map(data_all,sum_na) %>%
 
 final_data = 
   data_all %>% 
+  filter(year %in% c(2007:2018)) %>% 
   select(country_name:negative_affect)
 
 write.csv(final_data,file="data/final_data_all_country.csv",quote=F,row.names = F)
 ```
 
-After reviewing the whole dataset through checking the missing values in each variable, we decide to keep variables with the number of missing values less than 100. Finally we obtain 11 variables with 1704 observations without deleting any misssing values. Then we write the new tidyed data as `final_data_all_country.csv`, which is implemented for all the following works.
+### For exploratory analysis
+
+In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some [economists](https://www.investopedia.com/updates/top-developing-countries/) prefer to see a country with per capita GDP of at least $25,000 to be declared as developed. 
 
 ```{r rename develop, warning=FALSE}
 happy = 
@@ -109,11 +120,10 @@ happy =
          "corruption" = perceptions_of_corruption)  %>% 
   unique() %>% 
   mutate(o_gdp = exp(gdp)) %>%# in the original data, they use log get the result, i try to transfer in the real way
-  mutate(develop = ifelse(o_gdp > 25000, "developed", "developing")) %>% 
-  filter(year > 2006) # actually there is no speicific cretiria to distinguish the developed and developing country.
+  mutate(develop = ifelse(o_gdp > 25000, "developed", "developing"))  # actually there is no speicific cretiria to distinguish the developed and developing country.
 ```
 
-In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some [economists](https://www.investopedia.com/updates/top-developing-countries/) prefer to see a country with per capita GDP of at least $25,000 to be declared as developed. 
+We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents. 
 
 ```{r continent,  warning=FALSE}
 Asia = 
@@ -161,7 +171,7 @@ happy = happy %>%
   ))
 ```
 
-We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents. 
+To better show the association of other factors and happiness score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of `gdp`  and  `life_expectancy` are dramatically different from other factors. 
 
 ```{r Standardaization, warning=FALSE}
 happy_standard = happy %>% 
@@ -176,14 +186,84 @@ happy_standard = happy %>%
   select(-c(gdp:corruption), -o_gdp)
 ```
 
-To better show the association of other factors and happiness  score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of `gdp`  and  `life_expectancy` are dramatically different from other factors. 
+### For drawing maps
+
+Like data tidying for data exploratory analysis, we first read `final_data_all_country.csv` as happy1 and rename some variables in a clearer way and add new variables for drawing world map. Furthermore, we add the locations of capitals for each country by combining  [concap.csv](https://www.kaggle.com/sabihaif/world-happiness-report-analysis/data)into happy1. For some unmatched countries, we find their locations of capitals in Wikipedia. Finally, a new dataset is created for all changes stating above.
+
+```{r ,warning=FALSE}
+happy1 = read_csv("data/final_data_all_country.csv") %>% 
+  janitor::clean_names() %>% 
+  unique %>% 
+  mutate(label = str_c("<b>Happiness: ", round(life_ladder,2), 
+                      "</b><br>Country : ", country_name,
+                      sep = ""),
+        code = countrycode(country_name, 'country.name', 'iso3c'),## match code
+        code = replace_na(code,"XKX")) %>% 
+  rename("country" = country_name,
+         "happiness_score" = life_ladder,
+         "gdp" = log_gdp_per_capita,
+         "life_expectance" = healthy_life_expectancy_at_birth,
+         "freedom" = freedom_to_make_life_choices,
+         "corruption" = perceptions_of_corruption) 
+
+location = read_csv("data/concap.csv") %>% 
+  janitor::clean_names() %>% 
+  select(country_name,capital_latitude,capital_longitude) %>% 
+  rename("country" = country_name)
+
+happy_location_raw = left_join(happy1, location, by = "country")
+
+# Find countries whose locations of capitals could not match
+ list <-which(rowSums(is.na(happy_location_raw %>% 
+        select(capital_latitude))) > 0)
+ data_all_na <- happy_location_raw[list,] 
+ 
+ happy_location_lost =  
+ happy_location_raw[list,] %>% 
+   mutate(capital_latitude = case_when(
+    country == "Congo (Brazzaville)" ~ -4.267778,
+    country == "Ivory Coast" ~ 6.85,
+    country == "Gambia" ~ 13.466667,
+    country == "North Cyprus" ~ 35.183333,
+    country == "Palestinian Territories" ~ 31.516667,
+    country == "Taiwan Province of China"~ 25.066667,
+    country == "Somaliland region"~ 9.55,
+    country == "Congo (Kinshasa)"~ -4.316667,
+    country == "Hong Kong S.A.R. of China"~ 114.10000
+    ),
+    capital_longitude = case_when(
+    country == "Congo (Brazzaville)" ~ 15.291944,
+    country == "Ivory Coast" ~ 5.3,
+    country == "Gambia" ~ -16.6,
+    country == "North Cyprus" ~ 33.366667,
+    country == "Palestinian Territories" ~ 34.45,
+    country == "Taiwan Province of China"~ 121.516667,
+    country == "Somaliland region"~ 44.05,
+    country == "Congo (Kinshasa)"~ 15.316667,
+    country == "Hong Kong S.A.R. of China"~ 22.20000)
+    ) 
+    
+happy_location = 
+  bind_rows(happy_location_raw,happy_location_lost) %>% 
+  drop_na(capital_latitude,capital_longitude)
+
+```
 
 ## Exploratory analysis
 ### **Happiness score of all countries changes over time** 
 
+We firstly explore the changes of happiness score over time worldwide, by continents and by developing levels.
+
+* From the first plot, we can easily find that the mean happiness score increases from 2007 to 2010, and gradually decreases to the lowest point in 2014. Finally, it increases in the recent years. 2014, 2018
+
+* From the second plot, we divide these countries into different regions by the geographic continent. Australia has the overall highest and Africa has the overall lowest happiness score. Only Europe and Asia show the general increasing trend of happiness score over time. 
+
+* We can roughly further divide these continents into three groups base on the happiness scores. The high happiness score group contains Australis, the medium happiness score group contains Europe, North America and South America, and the low happiness score group contains Africa and Asia. 
+
+* From the third plot, the mean happiness score is obviously higher in developed countries than it in developing countries. 
+
 ```{r, warning=FALSE}
 plot1 = happy %>% 
-  filter(year>2006) %>%
   group_by(year) %>% 
   summarise(year_mean_score = mean(happiness_score)) %>% 
   ggplot(aes(x = year, y = year_mean_score)) +
@@ -195,7 +275,6 @@ plot1 = happy %>%
     breaks = c(2007,2008,2009,2010,2011, 2012, 2013,2014,2015,2016,2017,2018))
 
 plot2 = happy %>% 
-  filter(year>2006)%>%
   group_by(year, continent) %>% 
   summarise(year_mean_score = mean(happiness_score)) %>% 
   ggplot(aes(x = year, y = year_mean_score, color = continent)) +
@@ -211,7 +290,6 @@ plot2 = happy %>%
      
 
 plot3 = happy %>% 
-  filter(year > 2006) %>%
   drop_na(develop) %>%
   group_by(year, develop) %>% 
   summarise(year_mean_score = mean(happiness_score)) %>% 
@@ -229,21 +307,16 @@ plot3 = happy %>%
 plot1/plot2/plot3
 ```
 
-We firstly explore the changes of happiness score over time worldwide, by continents and by developing levels.
 
-* From the first plot, we can easily find that the mean happiness score increases from 2007 to 2010, and gradually decreases to the lowest point in 2014. Finally, it increases in the recent years. 2014, 2018
-
-* From the second plot, we divide these countries into different regions by the geographic continent. Australia has the overall highest and Africa has the overall lowest happiness score. Only Europe and Asia show the general increasing trend of happiness score over time. 
-
-* We can roughly further divide these continents into three groups base on the happiness scores. The high happiness score group contains Australis, the medium happiness score group contains Europe, North America and South America, and the low happiness score group contains Africa and Asia. 
-
-* From the third plot, the mean happiness score is obviously higher in developed countries than it in developing countries. 
 
 ### **The correlation plot for happiness score and other factors: worldwide**
 
+* From the scatterplot, the factors `negative_affect` and `corruption` have the negative association with happiness score, but `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `generosity` have the positive association.
+
+* From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
+
 ```{r, warning=FALSE, out.width = "50%"}
 happy_standard %>% 
-  filter(year>2006) %>%
   pivot_longer(s_gdp:s_corruption,
                names_to = "standard_factors",
                values_to = "standard_value") %>% 
@@ -260,7 +333,6 @@ happy_standard %>%
 
 happy_standard %>% 
   drop_na() %>%
-   filter(year > 2006) %>%
   select(-c(country, year, continent, develop)) %>% 
   cor() %>%
   corrplot.mixed(title = "Happiness score against other factors worldwide: 2007-2018",
@@ -268,16 +340,17 @@ happy_standard %>%
                   mar = c(0,0,1,0))
 ```
 
-* From the scatterplot, the factors `negative_affect` and `corruption` have the negative association with happiness score, but `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `generosity` have the positive association.
-
-* From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
-
 ### **The correlation plot for happiness score and other factors : continent**
+
+* Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). `gdp` is strongly positively associated with `corruption`(0.69) and negatively assoicated with `positive_affe t`(-0.86) 
+
+* Europe, North America, South America  have the medium happiness score, and the score has  moderate correlation with `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `corruption`(0.6 - 0.7) 
+
+* Africa and Asia have the lowest happiness score,  and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
 
 ```{r, warning=FALSE, out.width = "50%"}
 happy_standard %>% 
   drop_na() %>%
-   filter(year>2006)%>%
   filter(continent == "Australia") %>% 
   select(-c(country, year, continent, develop)) %>% 
   cor() %>%
@@ -287,7 +360,6 @@ happy_standard %>%
 
 happy_standard %>% 
   drop_na() %>%
-   filter(year>2006)%>%
   filter(continent %in% c("Europe", "North America", "South America"))  %>% 
   select(-c(country, year, continent, develop)) %>% 
   cor() %>%
@@ -297,7 +369,6 @@ happy_standard %>%
 
 happy_standard %>% 
   drop_na() %>%
-   filter(year > 2006) %>%
  filter(continent %in% c("Africa", "Asia")) %>% 
   select(-c(country, year, continent, develop)) %>% 
   cor() %>%
@@ -306,19 +377,18 @@ happy_standard %>%
                   mar=c(0,0,1,0))
 ```
 
-* Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). `gdp` is strongly positively associated with `corruption`(0.69) and negatively assoicated with `positive_affe t`(-0.86) 
-
-* Europe, North America, South America  have the medium happiness score, and the score has  moderate correlation with `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `corruption`(0.6 - 0.7) 
-
-* Africa and Asia have the lowest happiness score,  and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
 
 
 ### **The correlation plot for happiness score and othe factors : developing level**
 
+
+* Developing coountries have lower happiness score , and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(around  0.6). 
+
+* Developed coountries have higher happiness score , and the score has moderate correlation with `social support`,`freedom`, `positive_affect`, `negative_affect`, `generosity` and `corruption` (around 0.6)
+
 ```{r,  warning=FALSE, out.width = "50%"}
 happy_standard %>% 
   drop_na() %>%
-   filter(year>2006)%>%
   filter(develop == "developing") %>% 
   select(-c( country, year, continent, develop)) %>% 
   cor() %>%
@@ -328,7 +398,6 @@ happy_standard %>%
 
 happy_standard %>% 
   drop_na() %>%
-   filter(year>2006)%>%
   filter(develop == "developed") %>% 
   select(-c(country, year, continent, develop)) %>% 
   cor() %>%
@@ -337,9 +406,6 @@ happy_standard %>%
                   mar=c(0,0,1,0))
 ```
 
-* Developing coountries have lower happiness score , and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(around  0.6). 
-
-* Developed coountries have higher happiness score , and the score has moderate correlation with `social support`,`freedom`, `positive_affect`, `negative_affect`, `generosity` and `corruption` (around 0.6)
 
 ## Statistical Analysis(MLR)
 
@@ -386,23 +452,24 @@ fit3 = lm(happiness_score~., data = developed)
 
 ```
 
-```{r}
-fit2 %>% broom::tidy() %>% knitr::kable(digits = 3)
-```
-
 * For developing country, there is significant positive effect of `gdp`, `social_support`, `life_expectance` and `positive_affect` on the Happiness Score, at 0.001 siginificance level. 
 
 * For developing cooutry, the estimate linear equation is:
 $\hat{Happiness Score}$ = -2.320 + 0.255 gdp + 1.525 social_support +  0.033 life_expectance + 2.304 positive_affect???
 
 ```{r}
-fit3 %>% broom::tidy() %>% knitr::kable(digits = 3)
+fit2 %>% broom::tidy() %>% knitr::kable(digits = 3)
 ```
 
 * For developed country, there is significant positive effect of  `social_support`, `positive_affect` and `generosity`, and there is significant negative effect of `corruption` on the Happiness Score, at 0.001 siginificance level. 
 
 * For developed cooutry, the estimate linear equation is:
 $\hat{Happiness Score}$ = -3.323 + 6.097 social_support + 2.095	 positive_affect + 1.003 generosity -0.488 corruption???
+
+```{r}
+fit3 %>% broom::tidy() %>% knitr::kable(digits = 3)
+```
+
 
 ## Discussion
 
