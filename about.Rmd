@@ -1,27 +1,49 @@
-       ---
-title: "Final report"
+---
+title: "***Final report***"
 output: 
   html_document:
     toc: true
     toc_float: true
+    theme: spacelab
 ---
+<style type = "text/css">
+
+body{ /* Normal */
+    font-size: 14px;
+    color: black;
+}
+h1.title {
+font-size: 38px;
+color: darkred;
+}
+h2{ /* Header 2 */
+font-size: 28px;
+color: black;
+}
+h3{ /* Header 3 */
+font-size: 18px;
+color: black;
+}
+</style>
+
 ## Motivation
 
 Aristotle once said, “Happiness is the meaning and purpose of life.” However, as civilizations are developing, the happiness of human being becomes an ambiguous topic. Simple material enjoyment is no longer the only determinant of mental pleasure. Therefore, we wonder how the state of happiness in the world change overtime and what makes the world happy? For this purpose, 165 countries, 12 years from 2008 to 2018 and 8 factors about happiness are included in our analysis. 
 
-## Related work: 
+## Related work
 
 Our common interest on happiness around the world and appropriate dataset online make us choose this topic. 
 
-## Initial questions: 
+## Initial questions 
 
-We sought to see the general trend of happiness, indicating by life ladder, over recent years of each country around the world. We were also interested in examining influential factors on happiness  and the strength of their association. In addition, during the process of analysis, we found stratification might help the analysis and therefore, countries were divided into the developing and developed. As such, our questions were as follows:
+We sought to see the general trend of happiness, indicating by life ladder, over recent years of each country around the world. We were also interested in examining influential factors on happiness  and the strength of their association. In addition, during the process of analysis, we found stratification might help the analysis and therefore, countries were divided into the developing and developed in the first model, into different regions in the second model. As such, our questions were as follows:
 
 * What are the influential factors on happiness? How can we visualize these correlations?
 * How does happiness change in each country over recent years?
+* If the association differs in different regions?
 * If the association differs among developing and developed countries?
 
-## Data: 
+## Data 
 
 ```{r setup, include=FALSE}
 library(tidyverse) ## Data Manipulaion
@@ -152,8 +174,8 @@ happy_standard = happy %>%
 
 To better show the association of other factors and happiness  score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of `gdp`  and  `life_expectancy` are dramatically different from other factors. 
 
-## Exploratory analysis:
-### Happiness score of all countries changes over time: worldwide/continent/developing level
+## Exploratory analysis
+### **Happiness score of all countries changes over time** 
 
 ```{r, warning=FALSE}
 plot1 = happy %>% 
@@ -213,7 +235,8 @@ We firstly explore the changes of happiness score over time worldwide, by contin
 
 * From the third plot, the mean happiness score is obviously higher in developed countries than it in developing countries. 
 
-### The correlation plot for happiness score and other factors: worldwide
+### **The correlation plot for happiness score and other factors: worldwide**
+
 ```{r, warning=FALSE, out.width = "50%"}
 happy_standard %>% 
   filter(year>2006) %>%
@@ -245,7 +268,8 @@ happy_standard %>%
 
 * From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
 
-### The correlation plot for happiness score and other factors in different region:
+### **The correlation plot for happiness score and other factors in different region**
+
 ```{r, warning=FALSE, out.width = "50%"}
 happy_standard %>% 
   drop_na() %>%
@@ -285,7 +309,7 @@ happy_standard %>%
 * Africa and Asia have the lowest happiness score,  and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
 
 
-### The correlation plot for happiness score and othe factors in developed country and developing country:
+### **The correlation plot for happiness score and othe factors in developed country and developing country**
 
 ```{r,  warning=FALSE, out.width = "50%"}
 happy_standard %>% 
@@ -313,8 +337,7 @@ happy_standard %>%
 
 * Developed coountries have higher happiness score , and the score has moderate correlation with `social support`,`freedom`, `positive_affect`, `negative_affect`, `generosity` and `corruption` (around 0.6)
 
-## Statistical Analysis: 
-### Multiple Linear Regression
+## Statistical Analysis(MLR)
 
 ```{r}
 data =  happy %>% 

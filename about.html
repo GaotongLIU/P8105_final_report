@@ -12,14 +12,17 @@
 
 
 
-<title>about.utf8.md</title>
+<title>Final report</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -105,33 +108,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 61px;
+  padding-top: 52px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 66px;
-  margin-top: -66px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h2 {
-  padding-top: 66px;
-  margin-top: -66px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h3 {
-  padding-top: 66px;
-  margin-top: -66px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h4 {
-  padding-top: 66px;
-  margin-top: -66px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h5 {
-  padding-top: 66px;
-  margin-top: -66px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h6 {
-  padding-top: 66px;
-  margin-top: -66px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .dropdown-submenu {
   position: relative;
@@ -250,6 +253,63 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -257,6 +317,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -309,28 +379,50 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore"><strong><em>Final report</em></strong></h1>
 
 </div>
 
 
-<pre><code>   ---</code></pre>
-<p>title: “Final report” output: html_document: toc: true toc_float: true — ## Motivation</p>
+<style type = "text/css">
+
+body{ /* Normal */
+    font-size: 14px;
+    color: black;
+}
+h1.title {
+font-size: 38px;
+color: darkred;
+}
+h2{ /* Header 2 */
+font-size: 28px;
+color: black;
+}
+h3{ /* Header 3 */
+font-size: 18px;
+color: black;
+}
+</style>
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
 <p>Aristotle once said, “Happiness is the meaning and purpose of life.” However, as civilizations are developing, the happiness of human being becomes an ambiguous topic. Simple material enjoyment is no longer the only determinant of mental pleasure. Therefore, we wonder how the state of happiness in the world change overtime and what makes the world happy? For this purpose, 165 countries, 12 years from 2008 to 2018 and 8 factors about happiness are included in our analysis.</p>
+</div>
 <div id="related-work" class="section level2">
-<h2>Related work:</h2>
+<h2>Related work</h2>
 <p>Our common interest on happiness around the world and appropriate dataset online make us choose this topic.</p>
 </div>
 <div id="initial-questions" class="section level2">
-<h2>Initial questions:</h2>
-<p>We sought to see the general trend of happiness, indicating by life ladder, over recent years of each country around the world. We were also interested in examining influential factors on happiness and the strength of their association. In addition, during the process of analysis, we found stratification might help the analysis and therefore, countries were divided into the developing and developed. As such, our questions were as follows:</p>
+<h2>Initial questions</h2>
+<p>We sought to see the general trend of happiness, indicating by life ladder, over recent years of each country around the world. We were also interested in examining influential factors on happiness and the strength of their association. In addition, during the process of analysis, we found stratification might help the analysis and therefore, countries were divided into the developing and developed in the first model, into different regions in the second model. As such, our questions were as follows:</p>
 <ul>
 <li>What are the influential factors on happiness? How can we visualize these correlations?</li>
 <li>How does happiness change in each country over recent years?</li>
+<li>If the association differs in different regions?</li>
 <li>If the association differs among developing and developed countries?</li>
 </ul>
 </div>
 <div id="data" class="section level2">
-<h2>Data:</h2>
+<h2>Data</h2>
 <p>We first save the crude dataset as “.xls” format from the website and read it into R and call it <code>data_all</code>. The crude data includes 1704 observations and 26 variables.</p>
 <p>After reviewing the whole dataset through checking the missing values in each variable, we decide to keep variables with the number of missing values less than 100. Finally we obtain 11 variables with 1704 observations without deleting any misssing values. Then we write the new tidyed data as <code>final_data_all_country.csv</code>, which is implemented for all the following works.</p>
 <p>In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some <a href="https://www.investopedia.com/updates/top-developing-countries/">economists</a> prefer to see a country with per capita GDP of at least $25,000 to be declared as developed.</p>
@@ -338,9 +430,9 @@ $(document).ready(function () {
 <p>To better show the association of other factors and happiness score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of <code>gdp</code> and <code>life_expectancy</code> are dramatically different from other factors.</p>
 </div>
 <div id="exploratory-analysis" class="section level2">
-<h2>Exploratory analysis:</h2>
-<div id="happiness-score-of-all-countries-changes-over-time-worldwidecontinentdeveloping-level" class="section level3">
-<h3>Happiness score of all countries changes over time: worldwide/continent/developing level</h3>
+<h2>Exploratory analysis</h2>
+<div id="happiness-score-of-all-countries-changes-over-time" class="section level3">
+<h3><strong>Happiness score of all countries changes over time</strong></h3>
 <p><img src="about_files/figure-html/unnamed-chunk-3-1.png" width="100%" /></p>
 <p>We firstly explore the changes of happiness score over time worldwide, by continents and by developing levels.</p>
 <ul>
@@ -351,7 +443,7 @@ $(document).ready(function () {
 </ul>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-other-factors-worldwide" class="section level3">
-<h3>The correlation plot for happiness score and other factors: worldwide</h3>
+<h3><strong>The correlation plot for happiness score and other factors: worldwide</strong></h3>
 <p><img src="about_files/figure-html/unnamed-chunk-4-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-4-2.png" width="50%" /></p>
 <ul>
 <li><p>From the scatterplot, the factors <code>negative_affect</code> and <code>corruption</code> have the negative association with happiness score, but <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>generosity</code> have the positive association.</p></li>
@@ -359,7 +451,7 @@ $(document).ready(function () {
 </ul>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-other-factors-in-different-region" class="section level3">
-<h3>The correlation plot for happiness score and other factors in different region:</h3>
+<h3><strong>The correlation plot for happiness score and other factors in different region</strong></h3>
 <p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-2.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-3.png" width="50%" /></p>
 <ul>
 <li><p>Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). <code>gdp</code> is strongly positively associated with <code>corruption</code>(0.69) and negatively assoicated with <code>positive_affe t</code>(-0.86)</p></li>
@@ -368,7 +460,7 @@ $(document).ready(function () {
 </ul>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-othe-factors-in-developed-country-and-developing-country" class="section level3">
-<h3>The correlation plot for happiness score and othe factors in developed country and developing country:</h3>
+<h3><strong>The correlation plot for happiness score and othe factors in developed country and developing country</strong></h3>
 <p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="50%" /></p>
 <ul>
 <li><p>Developing coountries have lower happiness score , and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(around 0.6).</p></li>
@@ -376,10 +468,8 @@ $(document).ready(function () {
 </ul>
 </div>
 </div>
-<div id="statistical-analysis" class="section level2">
-<h2>Statistical Analysis:</h2>
-<div id="multiple-linear-regression" class="section level3">
-<h3>Multiple Linear Regression</h3>
+<div id="statistical-analysismlr" class="section level2">
+<h2>Statistical Analysis(MLR)</h2>
 <table>
 <thead>
 <tr class="header">
@@ -473,10 +563,11 @@ $(document).ready(function () {
 <p>According to the ## Discussion:</p>
 <p>What were your findings? Are they what you expect? What insights into the data can you make?</p>
 </div>
+
+
+
 </div>
-
-
-
+</div>
 
 </div>
 
@@ -509,6 +600,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
