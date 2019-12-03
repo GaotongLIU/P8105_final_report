@@ -357,6 +357,9 @@ div.tocify {
   <a href="data.html">Data</a>
 </li>
 <li>
+  <a href="aboutus.html">About us</a>
+</li>
+<li>
   <a href="https://yuqimiao.shinyapps.io/Gaotong/">Associaiton Map</a>
 </li>
 <li>
@@ -475,49 +478,49 @@ write.csv(final_data,file=&quot;data/final_data_all_country.csv&quot;,quote=F,ro
 </div>
 <div id="for-exploratory-analysis" class="section level3">
 <h3>For exploratory analysis</h3>
-<p>In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some <a href="https://www.investopedia.com/updates/top-developing-countries/">economists</a> prefer to see a country with per capita GDP of at least $25,000 to be declared as developed.</p>
+<p>In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some <a href="https://www.investopedia.com/updates/top-developing-countries/">economists</a> prefer to see a country with per capita GDP of at least $25,000 to be declared as developed. In the original data, they use log get the result, we transfer it in the real way to find cutpoint for developed and developing country.</p>
 <pre class="r"><code>happy = 
   read_csv(&quot;data/final_data_all_country.csv&quot;) %&gt;% 
-   rename(&quot;country&quot; = country_name,
-          &quot;happiness_score&quot; = life_ladder,
-         &quot;gdp&quot; = log_gdp_per_capita,
-         &quot;life_expectance&quot; = healthy_life_expectancy_at_birth,
-         &quot;freedom&quot; = freedom_to_make_life_choices,
-         &quot;corruption&quot; = perceptions_of_corruption)  %&gt;% 
+  rename( &quot;country&quot; = country_name,
+           &quot;happiness_score&quot; = life_ladder,
+           &quot;gdp&quot; = log_gdp_per_capita,
+           &quot;life_expectance&quot; = healthy_life_expectancy_at_birth,
+           &quot;freedom&quot; = freedom_to_make_life_choices,
+           &quot;corruption&quot; = perceptions_of_corruption)  %&gt;% 
   unique() %&gt;% 
-  mutate(o_gdp = exp(gdp)) %&gt;%# in the original data, they use log get the result, i try to transfer in the real way
-  mutate(develop = ifelse(o_gdp &gt; 25000, &quot;developed&quot;, &quot;developing&quot;))  # actually there is no speicific cretiria to distinguish the developed and developing country.</code></pre>
+  mutate(o_gdp = exp(gdp)) %&gt;%
+  mutate(develop = ifelse(o_gdp &gt; 25000, &quot;developed&quot;, &quot;developing&quot;))  </code></pre>
 <p>We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents.</p>
 <pre class="r"><code>Asia = 
   c(&quot;Israel&quot;, &quot;United Arab Emirates&quot;, &quot;Singapore&quot;, &quot;Thailand&quot;, &quot;Taiwan Province of China&quot;,
-                                   &quot;Qatar&quot;, &quot;Saudi Arabia&quot;, &quot;Kuwait&quot;, &quot;Bahrain&quot;, &quot;Malaysia&quot;, &quot;Uzbekistan&quot;, &quot;Japan&quot;,
-                                   &quot;South Korea&quot;, &quot;Turkmenistan&quot;, &quot;Kazakhstan&quot;, &quot;Turkey&quot;, &quot;Hong Kong S.A.R., China&quot;, &quot;Philippines&quot;,
-                                   &quot;Jordan&quot;, &quot;China&quot;, &quot;Pakistan&quot;, &quot;Indonesia&quot;, &quot;Azerbaijan&quot;, &quot;Lebanon&quot;, &quot;Vietnam&quot;,
-                                   &quot;Tajikistan&quot;, &quot;Bhutan&quot;, &quot;Kyrgyzstan&quot;, &quot;Nepal&quot;, &quot;Mongolia&quot;, &quot;Palestinian Territories&quot;,
-                                   &quot;Iran&quot;, &quot;Bangladesh&quot;, &quot;Myanmar&quot;, &quot;Iraq&quot;, &quot;Sri Lanka&quot;, &quot;Armenia&quot;, &quot;India&quot;, &quot;Georgia&quot;,
-                                   &quot;Cambodia&quot;, &quot;Afghanistan&quot;, &quot;Yemen&quot;, &quot;Syria&quot;)
+    &quot;Qatar&quot;, &quot;Saudi Arabia&quot;, &quot;Kuwait&quot;, &quot;Bahrain&quot;, &quot;Malaysia&quot;, &quot;Uzbekistan&quot;, &quot;Japan&quot;,
+    &quot;South Korea&quot;, &quot;Turkmenistan&quot;, &quot;Kazakhstan&quot;, &quot;Turkey&quot;, &quot;Hong Kong S.A.R., China&quot;, &quot;Philippines&quot;,
+    &quot;Jordan&quot;, &quot;China&quot;, &quot;Pakistan&quot;, &quot;Indonesia&quot;, &quot;Azerbaijan&quot;, &quot;Lebanon&quot;, &quot;Vietnam&quot;,
+    &quot;Tajikistan&quot;, &quot;Bhutan&quot;, &quot;Kyrgyzstan&quot;, &quot;Nepal&quot;, &quot;Mongolia&quot;, &quot;Palestinian Territories&quot;,
+    &quot;Iran&quot;, &quot;Bangladesh&quot;, &quot;Myanmar&quot;, &quot;Iraq&quot;, &quot;Sri Lanka&quot;, &quot;Armenia&quot;, &quot;India&quot;, &quot;Georgia&quot;,
+    &quot;Cambodia&quot;, &quot;Afghanistan&quot;, &quot;Yemen&quot;, &quot;Syria&quot;)
 
 Europe = 
   c(&quot;Norway&quot;, &quot;Denmark&quot;, &quot;Iceland&quot;, &quot;Switzerland&quot;, &quot;Finland&quot;,
-                                   &quot;Netherlands&quot;, &quot;Sweden&quot;, &quot;Austria&quot;, &quot;Ireland&quot;, &quot;Germany&quot;,
-                                   &quot;Belgium&quot;, &quot;Luxembourg&quot;, &quot;United Kingdom&quot;, &quot;Czech Republic&quot;,
-                                   &quot;Malta&quot;, &quot;France&quot;, &quot;Spain&quot;, &quot;Slovakia&quot;, &quot;Poland&quot;, &quot;Italy&quot;,
-                                   &quot;Russia&quot;, &quot;Lithuania&quot;, &quot;Latvia&quot;, &quot;Moldova&quot;, &quot;Romania&quot;,
-                                   &quot;Slovenia&quot;, &quot;North Cyprus&quot;, &quot;Cyprus&quot;, &quot;Estonia&quot;, &quot;Belarus&quot;,
-                                   &quot;Serbia&quot;, &quot;Hungary&quot;, &quot;Croatia&quot;, &quot;Kosovo&quot;, &quot;Montenegro&quot;,
-                                   &quot;Greece&quot;, &quot;Portugal&quot;, &quot;Bosnia and Herzegovina&quot;, &quot;Macedonia&quot;,
-                                   &quot;Bulgaria&quot;, &quot;Albania&quot;, &quot;Ukraine&quot;)
+    &quot;Netherlands&quot;, &quot;Sweden&quot;, &quot;Austria&quot;, &quot;Ireland&quot;, &quot;Germany&quot;,
+    &quot;Belgium&quot;, &quot;Luxembourg&quot;, &quot;United Kingdom&quot;, &quot;Czech Republic&quot;,
+    &quot;Malta&quot;, &quot;France&quot;, &quot;Spain&quot;, &quot;Slovakia&quot;, &quot;Poland&quot;, &quot;Italy&quot;,
+    &quot;Russia&quot;, &quot;Lithuania&quot;, &quot;Latvia&quot;, &quot;Moldova&quot;, &quot;Romania&quot;,
+    &quot;Slovenia&quot;, &quot;North Cyprus&quot;, &quot;Cyprus&quot;, &quot;Estonia&quot;, &quot;Belarus&quot;,
+    &quot;Serbia&quot;, &quot;Hungary&quot;, &quot;Croatia&quot;, &quot;Kosovo&quot;, &quot;Montenegro&quot;,
+    &quot;Greece&quot;, &quot;Portugal&quot;, &quot;Bosnia and Herzegovina&quot;, &quot;Macedonia&quot;,
+    &quot;Bulgaria&quot;, &quot;Albania&quot;, &quot;Ukraine&quot;)
 
 North_America = 
   c(&quot;Canada&quot;, &quot;Costa Rica&quot;, &quot;United States&quot;, &quot;Mexico&quot;,  
-                                   &quot;Panama&quot;,&quot;Trinidad and Tobago&quot;, &quot;El Salvador&quot;, &quot;Belize&quot;, &quot;Guatemala&quot;,
-                                   &quot;Jamaica&quot;, &quot;Nicaragua&quot;, &quot;Dominican Republic&quot;, &quot;Honduras&quot;,
-                                   &quot;Haiti&quot;)
+    &quot;Panama&quot;,&quot;Trinidad and Tobago&quot;, &quot;El Salvador&quot;, &quot;Belize&quot;, &quot;Guatemala&quot;,
+    &quot;Jamaica&quot;, &quot;Nicaragua&quot;, &quot;Dominican Republic&quot;, &quot;Honduras&quot;,
+    &quot;Haiti&quot;)
 
 Sorth_America =  
   c(&quot;Chile&quot;, &quot;Brazil&quot;, &quot;Argentina&quot;, &quot;Uruguay&quot;,
-                                   &quot;Colombia&quot;, &quot;Ecuador&quot;, &quot;Bolivia&quot;, &quot;Peru&quot;,
-                                   &quot;Paraguay&quot;, &quot;Venezuela&quot;)
+    &quot;Colombia&quot;, &quot;Ecuador&quot;, &quot;Bolivia&quot;, &quot;Peru&quot;,
+    &quot;Paraguay&quot;, &quot;Venezuela&quot;)
 
 Australia = 
   c(&quot;New Zealand&quot;, &quot;Australia&quot;)

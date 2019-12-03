@@ -90,7 +90,6 @@ library(tidyverse) ## Data Manipulaion
 library(corrplot) ## Correlation plot
 library(patchwork)
 library(readxl)
-library(tidyverse)
 library(dplyr)
 library(countrycode)  # Gets country code 
 
@@ -140,20 +139,20 @@ write.csv(final_data,file="data/final_data_all_country.csv",quote=F,row.names = 
 
 ### For exploratory analysis
 
-In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some [economists](https://www.investopedia.com/updates/top-developing-countries/) prefer to see a country with per capita GDP of at least $25,000 to be declared as developed. 
+In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some [economists](https://www.investopedia.com/updates/top-developing-countries/) prefer to see a country with per capita GDP of at least $25,000 to be declared as developed. In the original data, they use log get the result, we transfer it in the real way to find cutpoint for developed and developing country.
 
 ```{r rename develop, warning=FALSE}
 happy = 
   read_csv("data/final_data_all_country.csv") %>% 
-   rename("country" = country_name,
-          "happiness_score" = life_ladder,
-         "gdp" = log_gdp_per_capita,
-         "life_expectance" = healthy_life_expectancy_at_birth,
-         "freedom" = freedom_to_make_life_choices,
-         "corruption" = perceptions_of_corruption)  %>% 
+  rename( "country" = country_name,
+           "happiness_score" = life_ladder,
+           "gdp" = log_gdp_per_capita,
+           "life_expectance" = healthy_life_expectancy_at_birth,
+           "freedom" = freedom_to_make_life_choices,
+           "corruption" = perceptions_of_corruption)  %>% 
   unique() %>% 
-  mutate(o_gdp = exp(gdp)) %>%# in the original data, they use log get the result, i try to transfer in the real way
-  mutate(develop = ifelse(o_gdp > 25000, "developed", "developing"))  # actually there is no speicific cretiria to distinguish the developed and developing country.
+  mutate(o_gdp = exp(gdp)) %>%
+  mutate(develop = ifelse(o_gdp > 25000, "developed", "developing"))  
 ```
 
 We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents. 
@@ -161,34 +160,34 @@ We add a new variable to distinguish the continent, because we want to see wheth
 ```{r continent,  warning=FALSE}
 Asia = 
   c("Israel", "United Arab Emirates", "Singapore", "Thailand", "Taiwan Province of China",
-                                   "Qatar", "Saudi Arabia", "Kuwait", "Bahrain", "Malaysia", "Uzbekistan", "Japan",
-                                   "South Korea", "Turkmenistan", "Kazakhstan", "Turkey", "Hong Kong S.A.R., China", "Philippines",
-                                   "Jordan", "China", "Pakistan", "Indonesia", "Azerbaijan", "Lebanon", "Vietnam",
-                                   "Tajikistan", "Bhutan", "Kyrgyzstan", "Nepal", "Mongolia", "Palestinian Territories",
-                                   "Iran", "Bangladesh", "Myanmar", "Iraq", "Sri Lanka", "Armenia", "India", "Georgia",
-                                   "Cambodia", "Afghanistan", "Yemen", "Syria")
+    "Qatar", "Saudi Arabia", "Kuwait", "Bahrain", "Malaysia", "Uzbekistan", "Japan",
+    "South Korea", "Turkmenistan", "Kazakhstan", "Turkey", "Hong Kong S.A.R., China", "Philippines",
+    "Jordan", "China", "Pakistan", "Indonesia", "Azerbaijan", "Lebanon", "Vietnam",
+    "Tajikistan", "Bhutan", "Kyrgyzstan", "Nepal", "Mongolia", "Palestinian Territories",
+    "Iran", "Bangladesh", "Myanmar", "Iraq", "Sri Lanka", "Armenia", "India", "Georgia",
+    "Cambodia", "Afghanistan", "Yemen", "Syria")
 
 Europe = 
   c("Norway", "Denmark", "Iceland", "Switzerland", "Finland",
-                                   "Netherlands", "Sweden", "Austria", "Ireland", "Germany",
-                                   "Belgium", "Luxembourg", "United Kingdom", "Czech Republic",
-                                   "Malta", "France", "Spain", "Slovakia", "Poland", "Italy",
-                                   "Russia", "Lithuania", "Latvia", "Moldova", "Romania",
-                                   "Slovenia", "North Cyprus", "Cyprus", "Estonia", "Belarus",
-                                   "Serbia", "Hungary", "Croatia", "Kosovo", "Montenegro",
-                                   "Greece", "Portugal", "Bosnia and Herzegovina", "Macedonia",
-                                   "Bulgaria", "Albania", "Ukraine")
+    "Netherlands", "Sweden", "Austria", "Ireland", "Germany",
+    "Belgium", "Luxembourg", "United Kingdom", "Czech Republic",
+    "Malta", "France", "Spain", "Slovakia", "Poland", "Italy",
+    "Russia", "Lithuania", "Latvia", "Moldova", "Romania",
+    "Slovenia", "North Cyprus", "Cyprus", "Estonia", "Belarus",
+    "Serbia", "Hungary", "Croatia", "Kosovo", "Montenegro",
+    "Greece", "Portugal", "Bosnia and Herzegovina", "Macedonia",
+    "Bulgaria", "Albania", "Ukraine")
 
 North_America = 
   c("Canada", "Costa Rica", "United States", "Mexico",  
-                                   "Panama","Trinidad and Tobago", "El Salvador", "Belize", "Guatemala",
-                                   "Jamaica", "Nicaragua", "Dominican Republic", "Honduras",
-                                   "Haiti")
+    "Panama","Trinidad and Tobago", "El Salvador", "Belize", "Guatemala",
+    "Jamaica", "Nicaragua", "Dominican Republic", "Honduras",
+    "Haiti")
 
 Sorth_America =  
   c("Chile", "Brazil", "Argentina", "Uruguay",
-                                   "Colombia", "Ecuador", "Bolivia", "Peru",
-                                   "Paraguay", "Venezuela")
+    "Colombia", "Ecuador", "Bolivia", "Peru",
+    "Paraguay", "Venezuela")
 
 Australia = 
   c("New Zealand", "Australia")
