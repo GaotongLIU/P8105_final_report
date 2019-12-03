@@ -423,8 +423,9 @@ color: black;
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<p>We first save the crude dataset as “.xls” format from the website and read it into R and call it <code>data_all</code>. The crude data includes 1704 observations and 26 variables.</p>
-<p>After reviewing the whole dataset through checking the missing values in each variable, we decide to keep variables with the number of missing values less than 100. Finally we obtain 11 variables with 1704 observations without deleting any misssing values. Then we write the new tidyed data as <code>final_data_all_country.csv</code>, which is implemented for all the following works.</p>
+<p>We first save the crude dataset as “<code>.xls</code>” format from the website and read it into R and call it <code>data_all</code>. The crude data includes 1704 observations and 26 variables from 2005-2018 years, 165 countries.</p>
+<p>After reviewing the whole dataset through checking the missing values in each variable and in each year, we decide to keep variables with the number of missing values less than 100 and observations from 2007-2018.</p>
+<p>Finally we obtain 11 variables with 1588 observations from 164 countries without deleting any misssing values. Then we write the new tidyed data as <code>final_data_all_country.csv</code>, which is implemented for all the following works.</p>
 <p>In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some <a href="https://www.investopedia.com/updates/top-developing-countries/">economists</a> prefer to see a country with per capita GDP of at least $25,000 to be declared as developed.</p>
 <p>We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents.</p>
 <p>To better show the association of other factors and happiness score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of <code>gdp</code> and <code>life_expectancy</code> are dramatically different from other factors.</p>
@@ -483,79 +484,79 @@ color: black;
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-4.352</td>
-<td align="right">0.684</td>
-<td align="right">-6.362</td>
+<td align="right">-4.234</td>
+<td align="right">0.712</td>
+<td align="right">-5.946</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">freedom</td>
-<td align="right">0.216</td>
-<td align="right">0.143</td>
-<td align="right">1.511</td>
-<td align="right">0.131</td>
+<td align="right">0.189</td>
+<td align="right">0.147</td>
+<td align="right">1.285</td>
+<td align="right">0.199</td>
 </tr>
 <tr class="odd">
 <td align="left">negative_affect</td>
-<td align="right">0.160</td>
-<td align="right">0.203</td>
-<td align="right">0.788</td>
-<td align="right">0.431</td>
+<td align="right">0.189</td>
+<td align="right">0.209</td>
+<td align="right">0.902</td>
+<td align="right">0.367</td>
 </tr>
 <tr class="even">
 <td align="left">generosity</td>
-<td align="right">-0.112</td>
-<td align="right">0.105</td>
-<td align="right">-1.069</td>
-<td align="right">0.285</td>
+<td align="right">-0.127</td>
+<td align="right">0.109</td>
+<td align="right">-1.164</td>
+<td align="right">0.244</td>
 </tr>
 <tr class="odd">
 <td align="left">life_expectance</td>
 <td align="right">0.054</td>
 <td align="right">0.003</td>
-<td align="right">19.635</td>
+<td align="right">18.526</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">positive_affect</td>
-<td align="right">2.327</td>
-<td align="right">0.189</td>
-<td align="right">12.295</td>
+<td align="right">2.358</td>
+<td align="right">0.196</td>
+<td align="right">12.059</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">corruption</td>
-<td align="right">-0.741</td>
-<td align="right">0.131</td>
-<td align="right">-5.638</td>
+<td align="right">-0.743</td>
+<td align="right">0.136</td>
+<td align="right">-5.461</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">developdeveloping</td>
-<td align="right">2.450</td>
-<td align="right">0.679</td>
-<td align="right">3.609</td>
-<td align="right">0.000</td>
+<td align="right">2.303</td>
+<td align="right">0.705</td>
+<td align="right">3.265</td>
+<td align="right">0.001</td>
 </tr>
 <tr class="odd">
 <td align="left">social_support</td>
-<td align="right">6.169</td>
-<td align="right">0.687</td>
-<td align="right">8.986</td>
+<td align="right">6.053</td>
+<td align="right">0.713</td>
+<td align="right">8.485</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
 <td align="left">corruption:developdeveloping</td>
-<td align="right">0.935</td>
-<td align="right">0.195</td>
-<td align="right">4.807</td>
+<td align="right">0.961</td>
+<td align="right">0.201</td>
+<td align="right">4.790</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">developdeveloping:social_support</td>
-<td align="right">-4.039</td>
-<td align="right">0.705</td>
-<td align="right">-5.732</td>
+<td align="right">-3.907</td>
+<td align="right">0.733</td>
+<td align="right">-5.333</td>
 <td align="right">0.000</td>
 </tr>
 </tbody>

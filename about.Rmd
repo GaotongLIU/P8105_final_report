@@ -45,6 +45,8 @@ We sought to see the general trend of happiness, indicating by life ladder, over
 
 ## Data 
 
+We first save the crude dataset as "`.xls`" format from the website and read it into R and call it `data_all`. The crude data includes 1704 observations and 26 variables from 2005-2018 years, 165 countries.
+
 ```{r setup, include=FALSE}
 library(tidyverse) ## Data Manipulaion
 library(corrplot) ## Correlation plot
@@ -76,7 +78,9 @@ data_all = read_excel("./data/WHR.xls")%>%
  janitor::clean_names() 
 ```
 
-We first save the crude dataset as ".xls" format from the website and read it into R and call it `data_all`. The crude data includes 1704 observations and 26 variables.
+After reviewing the whole dataset through checking the missing values in each variable and in each year, we decide to keep variables with the number of missing values less than 100 and observations from 2007-2018.
+
+Finally we obtain 11 variables with 1588 observations from 164 countries without deleting any misssing values. Then we write the new tidyed data as `final_data_all_country.csv`, which is implemented for all the following works.
 
 ```{r }
 sum_na = function(x){
@@ -88,12 +92,12 @@ missing_number = map(data_all,sum_na) %>%
 
 final_data = 
   data_all %>% 
+  filter(year %in% c(2007:2018)) %>% 
   select(country_name:negative_affect)
 
 write.csv(final_data,file="data/final_data_all_country.csv",quote=F,row.names = F)
 ```
 
-After reviewing the whole dataset through checking the missing values in each variable, we decide to keep variables with the number of missing values less than 100. Finally we obtain 11 variables with 1704 observations without deleting any misssing values. Then we write the new tidyed data as `final_data_all_country.csv`, which is implemented for all the following works.
 
 ```{r rename develop, warning=FALSE}
 happy = 
