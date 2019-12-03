@@ -48,6 +48,39 @@ We sought to see the general trend of happiness, indicating by life ladder, over
 
 ## Data 
 
+The information was gathered primarily from *The World Happiness Report* created by the United Nations Sustainable Development Solutions Network [(UNSDSN)](https://worldhappiness.report/). Data was collected by asking respondents to value their lives today on a 0 to 10 scale, with the worst possible life as a 0 and the best possible life as a 10. This gave us a chance to compare happiness levels and inequality in different parts of the world.
+
+Furthermore, we find capital longitude and latitude from [kaggle](https://www.kaggle.com/sabihaif/world-happiness-report-analysis/data) to locate a country when drawing association map.
+
+### Variable definition
+
+Outcome and factors that we’re interested in：
+
+* `Life Ladder`: Happiness score or subjective well-being, with steps numbered from 0 at the bottom to 10 at the top.(we renamed it as happiness_score in dataset)
+
+* `LOG GDP per capita`: the log value of GDP per capita (variable name gdp) in purchasing power parity (PPP).(we renamed it as gdp in dataset)
+
+* `Social support`: the national average of the binary responses (either 0 or 1) to the GWP(Gallup World Poll) question “If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?”(we renamed it as gdp in dataset)
+
+* `Healthy life expectancy at birth`: Healthy life expectancies at birth are based on the data extracted from the World Health Organization’s (WHO) Global Health Observatory data repository.(we renamed it as life_expectance in dataset)
+
+* `Freedom to make life choices`: the national average of responses (either 0 or 1) to the GWP question “Are you satisfied or dissatisfied with your freedom to choose what you do with your life?” (we renamed it as freedom" in dataset)
+
+* `Generosity`: the residual of regressing national average of response to the GWP question “Have you donated money to a charity in the past month?” on GDP per capita.
+
+* `Perceptions of corruption`: the national average of the survey responses to two questions in the GWP: “Is corruption widespread throughout the government or not” and “Is corruption widespread within businesses or not?” The overall perception is just the average of the two 0-or-1 responses.(we renamed it as corruption in dataset)
+
+* `Positive affect`: the average of three positive affect measures in GWP: happiness, laugh and enjoyment in the GWP, respectively the responses to
+“Did you experience the following feelings during A LOT OF THE DAY yesterday? How about Happiness?”, “Did you smile or laugh a lot yesterday?”,
+and “Did you experience the following feelings during A LOT OF THE DAY
+yesterday? How about Enjoyment?”.
+
+* `Negative affect`: the average of three negative affect measures like worry, sadness and anger in GWP, respectively the responses to “Did
+you experience the following feelings during A LOT OF THE DAY yesterday?
+How about Worry?”, “Did you experience the following feelings during A LOT
+OF THE DAY yesterday? How about Sadness?”, and “Did you experience the
+following feelings during A LOT OF THE DAY yesterday? How about Anger?”
+
 ### Loading and tidying data
 
 We first save the crude dataset as "`.xls`" format from the website and read it into R and call it `data_all`. The crude data includes 1704 observations and 26 variables from 2005-2018 years, 165 countries.
@@ -188,7 +221,7 @@ happy_standard = happy %>%
 
 ### For drawing maps
 
-Like data tidying for data exploratory analysis, we first read `final_data_all_country.csv` as happy1 and rename some variables in a clearer way and add new variables for drawing world map. Furthermore, we add the locations of capitals for each country by combining  [concap.csv](https://www.kaggle.com/sabihaif/world-happiness-report-analysis/data)into happy1. For some unmatched countries, we find their locations of capitals in Wikipedia. Finally, a new dataset is created for all changes stating above.
+Like data tidying for data exploratory analysis, we first read `final_data_all_country.csv` as happy1 and rename some variables in a clearer way and add new variables for drawing world map. Furthermore, we add the locations of capitals for each country by combining  [concap.csv](https://www.kaggle.com/sabihaif/world-happiness-report-analysis/data) into happy1. For some unmatched countries, we find their locations of capitals in Wikipedia. Finally, a new dataset is created for all changes stating above.
 
 ```{r ,warning=FALSE}
 happy1 = read_csv("data/final_data_all_country.csv") %>% 
