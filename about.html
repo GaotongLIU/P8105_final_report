@@ -681,7 +681,7 @@ plot1/plot2/plot3</code></pre>
        y = &quot;Standard score of other factors&quot;, 
        title = &quot;Happiness score against other factors worldwide: 2007-2018&quot;) + 
   theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
+<p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
   select(-c(country, year, continent, develop,o_gdp)) %&gt;% 
@@ -689,7 +689,7 @@ plot1/plot2/plot3</code></pre>
   corrplot.mixed(title = &quot;Happiness score against other factors worldwide: 2007-2018&quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar = c(0,0,1,0))</code></pre>
-<p><img src="about_files/figure-html/unnamed-chunk-5-2.png" width="50%" /></p>
+<p><img src="about_files/figure-html/unnamed-chunk-5-2.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-other-factors-continent" class="section level3">
 <h3><strong>The correlation plot for happiness score and other factors : continent</strong></h3>
@@ -706,7 +706,7 @@ plot1/plot2/plot3</code></pre>
   corrplot.mixed(title = &quot;Australia: 2007-2018&quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar=c(0,0,1,0))</code></pre>
-<p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
+<p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
   filter(continent %in% c(&quot;Europe&quot;, &quot;North America&quot;, &quot;South America&quot;))  %&gt;% 
@@ -715,7 +715,7 @@ plot1/plot2/plot3</code></pre>
   corrplot.mixed(title = &quot;Europe, North America, South America: 2007-2018&quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar = c(0,0,1,0))</code></pre>
-<p><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="50%" /></p>
+<p><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="70%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
  filter(continent %in% c(&quot;Africa&quot;, &quot;Asia&quot;)) %&gt;% 
@@ -724,7 +724,7 @@ plot1/plot2/plot3</code></pre>
   corrplot.mixed(title = &quot;Africa, Asia: 2007-2018 &quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar=c(0,0,1,0))</code></pre>
-<p><img src="about_files/figure-html/unnamed-chunk-6-3.png" width="50%" /></p>
+<p><img src="about_files/figure-html/unnamed-chunk-6-3.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-othe-factors-developing-level" class="section level3">
 <h3><strong>The correlation plot for happiness score and othe factors : developing level</strong></h3>
@@ -740,7 +740,7 @@ plot1/plot2/plot3</code></pre>
   corrplot.mixed(title = &quot;Developing: 2007-2018&quot;,
                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar=c(0,0,1,0))</code></pre>
-<p><img src="about_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+<p><img src="about_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>happy %&gt;% 
   drop_na() %&gt;%
   filter(develop == &quot;developed&quot;) %&gt;% 
@@ -749,7 +749,7 @@ plot1/plot2/plot3</code></pre>
   corrplot.mixed(title = &quot;Developed: 2007-2018&quot;,
                   tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
                   mar=c(0,0,1,0))</code></pre>
-<p><img src="about_files/figure-html/unnamed-chunk-7-2.png" width="50%" /></p>
+<p><img src="about_files/figure-html/unnamed-chunk-7-2.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="statistical-analysismlr" class="section level2">
@@ -788,8 +788,7 @@ developed =  happy %&gt;%
 fit2 = lm(happiness_score~., data = developing)
 fit3 = lm(happiness_score~., data = developed)</code></pre>
 <ul>
-<li><p>For developing country, there is significant positive effect of <code>gdp</code>, <code>social_support</code>, <code>life_expectance</code> and <code>positive_affect</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
-<li><p>For developing cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -2.320 + 0.255 gdp + 1.525 social_support + 0.033 life_expectance + 2.304 positive_affect???</p></li>
+<li>For developing country, there is significant positive effect of <code>gdp</code>, <code>social_support</code>, <code>life_expectance</code> and <code>positive_affect</code> on the Happiness Score, at 0.001 siginificance level.</li>
 </ul>
 <pre class="r"><code>fit2 %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 3)</code></pre>
 <table>
@@ -869,8 +868,7 @@ fit3 = lm(happiness_score~., data = developed)</code></pre>
 </tbody>
 </table>
 <ul>
-<li><p>For developed country, there is significant positive effect of <code>social_support</code>, <code>positive_affect</code> and <code>generosity</code>, and there is significant negative effect of <code>corruption</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
-<li><p>For developed cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -3.323 + 6.097 social_support + 2.095 positive_affect + 1.003 generosity -0.488 corruption???</p></li>
+<li>For developed country, there is significant positive effect of <code>social_support</code>, <code>positive_affect</code> and <code>generosity</code>, and there is significant negative effect of <code>corruption</code> on the Happiness Score, at 0.001 siginificance level.</li>
 </ul>
 <pre class="r"><code>fit3 %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 3)</code></pre>
 <table>
