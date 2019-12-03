@@ -10,10 +10,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Yuqi Miao, Yuao Yang, Ruoyuan Qian, Shuyi Shen, Gaotong Liu" />
 
 
-<title>What makes the world happy?</title>
+<title>noway.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -251,6 +253,63 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -258,6 +317,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -282,9 +351,6 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="data.html">Data</a>
-</li>
-<li>
-  <a href="aboutus.html">About us</a>
 </li>
 <li>
   <a href="https://yuqimiao.shinyapps.io/Gaotong/">Associaiton Map</a>
@@ -313,58 +379,18 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore"><strong><em>What makes the world happy?</em></strong></h1>
-<h4 class="author"><em>Yuqi Miao, Yuao Yang, Ruoyuan Qian, Shuyi Shen, Gaotong Liu</em></h4>
 
 </div>
 
 
-<style type = "text/css">
-
-body{ /* Normal */
-    font-size: 14px;
-    color: black;
-}
-h1.title {
-font-size: 50px;
-color: darkred;
-
-}
-h2{ /* Header 2 */
-font-size: 22px;
-color: black;
-}
-</style>
-<iframe src="https://plot.ly/~miaoyuqi/1.embed" width="800" height="600" id="igraph" scrolling="no" seamless="seamless" frameBorder="0">
-</iframe>
-<div id="motivation" class="section level2">
-<h2>Motivation</h2>
-<p>As civilizations are developing, the happiness of human being becomes an ambiguous topic. Simple material enjoyment is no longer the only determinant of mental pleasure. So, how the state of happiness in the world change overtime and what makes the world happy? We are trying to find the reasons, and our final goal is to provide helpful information for governments to make better decisions with respect to higher life evaluation.</p>
-</div>
-<div id="data-source" class="section level2">
-<h2>Data Source</h2>
-<p>The information was gathered primarily from <em>The World Happiness Report</em> created by the United Nations Sustainable Development Solutions Network <a href="https://worldhappiness.report/">(UNSDSN)</a>. It is an annual landmark survey of the state of global happiness that ranks 156 countries by how happy their citizens perceive themselves to be. The dataset we use contains rankings of national happiness together with various life factors correlated from 2005 to 2018.</p>
-<p>Furthermore, we find capital longitude and latitude from <a href="https://www.kaggle.com/sabihaif/world-happiness-report-analysis/data">kaggle</a> to locate a country when drawing association map.</p>
-</div>
-<div id="overall-analysis" class="section level2">
-<h2>Overall analysis</h2>
-<ul>
-<li><p>Firstly, to see the overal change of world happiness score along time, we draw a <a href="global_animation_plot.html">Global animation Map</a>;</p></li>
-<li><p>Secondly, to see the association between different factors and happiness score among years, we draw an <a href="https://yuqimiao.shinyapps.io/Gaotong/">interactive association app</a></p></li>
-<li><p>Then, we perform Correlation analysis and Multiple Linear Regression in the <a href="about.html">Final Report</a>. we analyses the correlations between happiness score and interested factors, and internal correlations in factors in different situations, Finally, we explores the associations between interested factors and happiness score</p></li>
-</ul>
-</div>
-<div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
-<p>From the dataset and analysis for worldwide level, except the factor negative_affect, all of our interested factors have associations with happiness score. The top two factors are positive_affect and social_support. In addition, many factors corelated with each other like gdp and life_expectance, freedom and positive_affect. However, the associations change variably in different situations like different level of development, different continents.</p>
-<p>For more details , click by <a href="about.html">report</a>.</p>
-</div>
-<div id="screencast" class="section level2">
-<h2>Screencast</h2>
+<div id="no-way" class="section level1">
+<h1>NO WAY!!!!!!!!!!!!!!</h1>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -397,6 +423,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
