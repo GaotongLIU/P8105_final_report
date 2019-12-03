@@ -423,18 +423,27 @@ color: black;
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
+<div id="loading-and-tidying-data" class="section level3">
+<h3>Loading and tidying data</h3>
 <p>We first save the crude dataset as “<code>.xls</code>” format from the website and read it into R and call it <code>data_all</code>. The crude data includes 1704 observations and 26 variables from 2005-2018 years, 165 countries.</p>
 <p>After reviewing the whole dataset through checking the missing values in each variable and in each year, we decide to keep variables with the number of missing values less than 100 and observations from 2007-2018.</p>
 <p>Finally we obtain 11 variables with 1588 observations from 164 countries without deleting any misssing values. Then we write the new tidyed data as <code>final_data_all_country.csv</code>, which is implemented for all the following works.</p>
+</div>
+<div id="for-exploratory-analysis" class="section level3">
+<h3>For exploratory analysis</h3>
 <p>In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some <a href="https://www.investopedia.com/updates/top-developing-countries/">economists</a> prefer to see a country with per capita GDP of at least $25,000 to be declared as developed.</p>
 <p>We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents.</p>
 <p>To better show the association of other factors and happiness score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of <code>gdp</code> and <code>life_expectancy</code> are dramatically different from other factors.</p>
+</div>
+<div id="for-drawing-maps" class="section level3">
+<h3>For drawing maps</h3>
+<p>Like data tidying for data exploratory analysis, we first read <code>final_data_all_country.csv</code> as happy1 and rename some variables in a clearer way and add new variables for drawing world map. Furthermore, we add the locations of capitals for each country by combining <a href="https://www.kaggle.com/sabihaif/world-happiness-report-analysis/data">concap.csv</a>into happy1. For some unmatched countries, we find their locations of capitals in Wikipedia. Finally, a new dataset is created for all changes stating above.</p>
+</div>
 </div>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis</h2>
 <div id="happiness-score-of-all-countries-changes-over-time" class="section level3">
 <h3><strong>Happiness score of all countries changes over time</strong></h3>
-<p><img src="about_files/figure-html/unnamed-chunk-3-1.png" width="100%" /></p>
 <p>We firstly explore the changes of happiness score over time worldwide, by continents and by developing levels.</p>
 <ul>
 <li><p>From the first plot, we can easily find that the mean happiness score increases from 2007 to 2010, and gradually decreases to the lowest point in 2014. Finally, it increases in the recent years. 2014, 2018</p></li>
@@ -442,31 +451,32 @@ color: black;
 <li><p>We can roughly further divide these continents into three groups base on the happiness scores. The high happiness score group contains Australis, the medium happiness score group contains Europe, North America and South America, and the low happiness score group contains Africa and Asia.</p></li>
 <li><p>From the third plot, the mean happiness score is obviously higher in developed countries than it in developing countries.</p></li>
 </ul>
+<p><img src="about_files/figure-html/unnamed-chunk-4-1.png" width="100%" /></p>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-other-factors-worldwide" class="section level3">
 <h3><strong>The correlation plot for happiness score and other factors: worldwide</strong></h3>
-<p><img src="about_files/figure-html/unnamed-chunk-4-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-4-2.png" width="50%" /></p>
 <ul>
 <li><p>From the scatterplot, the factors <code>negative_affect</code> and <code>corruption</code> have the negative association with happiness score, but <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>generosity</code> have the positive association.</p></li>
 <li><p>From the correlation matrix plot, the happiness score is highly associated with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(&gt; 0.7). In addition, <code>gdp</code> and <code>life_expctancy</code> are highly correlated with each other(&gt; 0.7).</p></li>
 </ul>
+<p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-2.png" width="50%" /></p>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-other-factors-continent" class="section level3">
 <h3><strong>The correlation plot for happiness score and other factors : continent</strong></h3>
-<p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-2.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-3.png" width="50%" /></p>
 <ul>
 <li><p>Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). <code>gdp</code> is strongly positively associated with <code>corruption</code>(0.69) and negatively assoicated with <code>positive_affe t</code>(-0.86)</p></li>
 <li><p>Europe, North America, South America have the medium happiness score, and the score has moderate correlation with <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>corruption</code>(0.6 - 0.7)</p></li>
 <li><p>Africa and Asia have the lowest happiness score, and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(0.6 - 0.7).</p></li>
 </ul>
+<p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-6-3.png" width="50%" /></p>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-othe-factors-developing-level" class="section level3">
 <h3><strong>The correlation plot for happiness score and othe factors : developing level</strong></h3>
-<p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="50%" /></p>
 <ul>
 <li><p>Developing coountries have lower happiness score , and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(around 0.6).</p></li>
 <li><p>Developed coountries have higher happiness score , and the score has moderate correlation with <code>social support</code>,<code>freedom</code>, <code>positive_affect</code>, <code>negative_affect</code>, <code>generosity</code> and <code>corruption</code> (around 0.6)</p></li>
 </ul>
+<p><img src="about_files/figure-html/unnamed-chunk-7-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-7-2.png" width="50%" /></p>
 </div>
 </div>
 <div id="statistical-analysismlr" class="section level2">
@@ -479,6 +489,10 @@ color: black;
 <li><p>There is no overall significant effect of either <code>develop</code> or <code>life_expectance</code>, but there is a significant crossover interaction at 0.001 significance level. The effect of <code>life_expectance</code> on the Happiness Score is opposite, depending on the value of <code>develop</code>.</p></li>
 </ul>
 <p>To interpret the results, we conduct the stratified analysis based on the developing level. Results are below, and model assumptions are checked after the discussion.</p>
+<ul>
+<li><p>For developing country, there is significant positive effect of <code>gdp</code>, <code>social_support</code>, <code>life_expectance</code> and <code>positive_affect</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
+<li><p>For developing cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -2.320 + 0.255 gdp + 1.525 social_support + 0.033 life_expectance + 2.304 positive_affect???</p></li>
+</ul>
 <table>
 <thead>
 <tr class="header">
@@ -556,8 +570,8 @@ color: black;
 </tbody>
 </table>
 <ul>
-<li><p>For developing country, there is significant positive effect of <code>gdp</code>, <code>social_support</code>, <code>life_expectance</code> and <code>positive_affect</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
-<li><p>For developing cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -2.320 + 0.255 gdp + 1.525 social_support + 0.033 life_expectance + 2.304 positive_affect???</p></li>
+<li><p>For developed country, there is significant positive effect of <code>social_support</code>, <code>positive_affect</code> and <code>generosity</code>, and there is significant negative effect of <code>corruption</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
+<li><p>For developed cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -3.323 + 6.097 social_support + 2.095 positive_affect + 1.003 generosity -0.488 corruption???</p></li>
 </ul>
 <table>
 <thead>
@@ -635,10 +649,6 @@ color: black;
 </tr>
 </tbody>
 </table>
-<ul>
-<li><p>For developed country, there is significant positive effect of <code>social_support</code>, <code>positive_affect</code> and <code>generosity</code>, and there is significant negative effect of <code>corruption</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
-<li><p>For developed cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -3.323 + 6.097 social_support + 2.095 positive_affect + 1.003 generosity -0.488 corruption???</p></li>
-</ul>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
