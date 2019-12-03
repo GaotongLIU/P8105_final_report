@@ -5,6 +5,8 @@ output:
     toc: true
     toc_float: true
     theme: spacelab
+editor_options: 
+  chunk_output_type: console
 ---
 <style type = "text/css">
 
@@ -106,7 +108,8 @@ happy =
          "corruption" = perceptions_of_corruption)  %>% 
   unique() %>% 
   mutate(o_gdp = exp(gdp)) %>%# in the original data, they use log get the result, i try to transfer in the real way
-  mutate(develop = ifelse(o_gdp > 25000, "developed", "developing")) # actually there is no speicific cretiria to distinguish the developed and developing country.
+  mutate(develop = ifelse(o_gdp > 25000, "developed", "developing")) %>% 
+  filter(year > 2006) # actually there is no speicific cretiria to distinguish the developed and developing country.
 ```
 
 In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some [economists](https://www.investopedia.com/updates/top-developing-countries/) prefer to see a country with per capita GDP of at least $25,000 to be declared as developed. 
@@ -268,7 +271,7 @@ happy_standard %>%
 
 * From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
 
-### **The correlation plot for happiness score and other factors in different region**
+### **The correlation plot for happiness score and other factors : continent**
 
 ```{r, warning=FALSE, out.width = "50%"}
 happy_standard %>% 
@@ -309,7 +312,7 @@ happy_standard %>%
 * Africa and Asia have the lowest happiness score,  and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
 
 
-### **The correlation plot for happiness score and othe factors in developed country and developing country**
+### **The correlation plot for happiness score and othe factors : developing level**
 
 ```{r,  warning=FALSE, out.width = "50%"}
 happy_standard %>% 
@@ -339,24 +342,77 @@ happy_standard %>%
 
 ## Statistical Analysis(MLR)
 
+After visualization the correlation of happiness score and other factors in different levels, we decide to formally test the main effect of `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect`, `negative_affect` , `generosity` and `corruption` on the happiness score and the `interaction` effect between several covariates. 
+
+By the inspiration of exploratory correlation plots, the developing levels and continent may also influence the estimates in the regression model. However, we think that the difference of correlation coefficient between continent mainly due to the developing level. Besides, we define the developing level based on the gdp, so we exclude gdp and only include the developing level as categorical variable in the final analysis. 
+
+* After fitting with total 8 main effects, only five of them showing significant results (P<0.001), so we only use `social support`, `life_expectancy`, `positive_affect` and `corruption` to interact with `develop`. 
+
 ```{r}
 data =  happy %>% 
   mutate(develop = as.factor(develop),
          continent = as.factor(continent)) %>%
   select(-c(country, year, o_gdp))
-fit = lm(happiness_score ~
+
+fit1 = lm(happiness_score~ 
             freedom + 
             negative_affect + 
             generosity + 
-            life_expectance + 
-            positive_affect + 
-            corruption*develop + 
-            social_support*develop, data = data)
-fit %>% broom::tidy() %>% knitr::kable(digits = 3)
+            social_support*develop +  
+            life_expectance*develop + 
+            positive_affect*develop + 
+            corruption*develop, data = data)
+
 ```
 
-According to the
-## Discussion:
+* There is a siginificant interaction effect of `social_support` and `develop`, `corruption` and `develop`. The effect of `social_support` and `corruption`  on the Happiness Score is depending on the value of `develop` at 0.001 significance level.
 
-What were your findings? Are they what you expect? What insights into the data can you make?
+* There is no overall significant effect of either `develop` or `life_expectance`, but there is a significant crossover interaction at 0.001 significance level. The effect of `life_expectance` on the Happiness Score is opposite, depending on the value of `develop`.
+
+To interpret the results, we conduct the stratified analysis based on the developing level. Results are below, and model assumptions are checked after the discussion.
+
+```{r}
+developing =  happy %>% 
+  filter(develop == "developing") %>% 
+  select(-c(o_gdp, develop, continent, country, year)) 
+  
+developed =  happy %>% 
+  filter(develop == "developed") %>% 
+  select(-c(o_gdp, develop, continent, country, year)) 
+
+fit2 = lm(happiness_score~., data = developing)
+fit3 = lm(happiness_score~., data = developed)
+
+```
+
+```{r}
+fit2 %>% broom::tidy() %>% knitr::kable(digits = 3)
+```
+
+* For developing country, there is significant positive effect of `gdp`, `social_support`, `life_expectance` and `positive_affect` on the Happiness Score, at 0.001 siginificance level. 
+
+* For developing cooutry, the estimate linear equation is:
+$\hat{Happiness Score}$ = -2.320 + 0.255 gdp + 1.525 social_support +  0.033 life_expectance + 2.304 positive_affect???
+
+```{r}
+fit3 %>% broom::tidy() %>% knitr::kable(digits = 3)
+```
+
+* For developed country, there is significant positive effect of  `social_support`, `positive_affect` and `generosity`, and there is significant negative effect of `corruption` on the Happiness Score, at 0.001 siginificance level. 
+
+* For developed cooutry, the estimate linear equation is:
+$\hat{Happiness Score}$ = -3.323 + 6.097 social_support + 2.095	 positive_affect + 1.003 generosity -0.488 corruption???
+
+## Discussion
+
+Although the happiness score slightly increases from 2007 to 2018 in the worldwide level, some regions have decreasing trend, and developed countries also have decreasing trend. It is interesting that the happiness score does not increase given the economic growth.
+
+From the correlation analysis and the stratified analysis in linear regression, the happiness score is highly associated with the `social support` and `positive affect` both in developed countries and developing countries. However, `gdp` and `life expectancy` are positively associated with happiness score only in the developing countries, while `generosity` is positively , and `corruption` is negatively associated with happiness score only in the developed countries. 
+
+These results are reasonable and mostly what we expect. Overall, happiness score depends on economics (GDP), social support (someone to count on), health (life expectancy), positive mood (positive affect) and perceptions of corruption. For developing countries, economics and health become more important in evaluating happiness, while for developed countries, perceptions of corruption and generosity(donation) become more crucial. 
+
+The government of developing countries should focus more on economic growth and improving healthcare to increase the happiness perception. The government of developed countries should have policies to control the corruption in the  business and government and have policies to encourage donation to increase the happiness perception. 
+
+
+
 

@@ -450,8 +450,8 @@ color: black;
 <li><p>From the correlation matrix plot, the happiness score is highly associated with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(&gt; 0.7). In addition, <code>gdp</code> and <code>life_expctancy</code> are highly correlated with each other(&gt; 0.7).</p></li>
 </ul>
 </div>
-<div id="the-correlation-plot-for-happiness-score-and-other-factors-in-different-region" class="section level3">
-<h3><strong>The correlation plot for happiness score and other factors in different region</strong></h3>
+<div id="the-correlation-plot-for-happiness-score-and-other-factors-continent" class="section level3">
+<h3><strong>The correlation plot for happiness score and other factors : continent</strong></h3>
 <p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-2.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-3.png" width="50%" /></p>
 <ul>
 <li><p>Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). <code>gdp</code> is strongly positively associated with <code>corruption</code>(0.69) and negatively assoicated with <code>positive_affe t</code>(-0.86)</p></li>
@@ -459,8 +459,8 @@ color: black;
 <li><p>Africa and Asia have the lowest happiness score, and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(0.6 - 0.7).</p></li>
 </ul>
 </div>
-<div id="the-correlation-plot-for-happiness-score-and-othe-factors-in-developed-country-and-developing-country" class="section level3">
-<h3><strong>The correlation plot for happiness score and othe factors in developed country and developing country</strong></h3>
+<div id="the-correlation-plot-for-happiness-score-and-othe-factors-developing-level" class="section level3">
+<h3><strong>The correlation plot for happiness score and othe factors : developing level</strong></h3>
 <p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="50%" /></p>
 <ul>
 <li><p>Developing coountries have lower happiness score , and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(around 0.6).</p></li>
@@ -470,6 +470,14 @@ color: black;
 </div>
 <div id="statistical-analysismlr" class="section level2">
 <h2>Statistical Analysis(MLR)</h2>
+<p>After visualization the correlation of happiness score and other factors in different levels, we decide to formally test the main effect of <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code>, <code>negative_affect</code> , <code>generosity</code> and <code>corruption</code> on the happiness score and the <code>interaction</code> effect between several covariates.</p>
+<p>By the inspiration of exploratory correlation plots, the developing levels and continent may also influence the estimates in the regression model. However, we think that the difference of correlation coefficient between continent mainly due to the developing level. Besides, we define the developing level based on the gdp, so we exclude gdp and only include the developing level as categorical variable in the final analysis.</p>
+<ul>
+<li><p>After fitting with total 8 main effects, only five of them showing significant results (P&lt;0.001), so we only use <code>social support</code>, <code>life_expectancy</code>, <code>positive_affect</code> and <code>corruption</code> to interact with <code>develop</code>.</p></li>
+<li><p>There is a siginificant interaction effect of <code>social_support</code> and <code>develop</code>, <code>corruption</code> and <code>develop</code>. The effect of <code>social_support</code> and <code>corruption</code> on the Happiness Score is depending on the value of <code>develop</code> at 0.001 significance level.</p></li>
+<li><p>There is no overall significant effect of either <code>develop</code> or <code>life_expectance</code>, but there is a significant crossover interaction at 0.001 significance level. The effect of <code>life_expectance</code> on the Happiness Score is opposite, depending on the value of <code>develop</code>.</p></li>
+</ul>
+<p>To interpret the results, we conduct the stratified analysis based on the developing level. Results are below, and model assumptions are checked after the discussion.</p>
 <table>
 <thead>
 <tr class="header">
@@ -483,85 +491,160 @@ color: black;
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-4.352</td>
-<td align="right">0.684</td>
-<td align="right">-6.362</td>
+<td align="right">-2.324</td>
+<td align="right">0.243</td>
+<td align="right">-9.546</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">freedom</td>
-<td align="right">0.216</td>
-<td align="right">0.143</td>
-<td align="right">1.511</td>
-<td align="right">0.131</td>
-</tr>
-<tr class="odd">
-<td align="left">negative_affect</td>
-<td align="right">0.160</td>
-<td align="right">0.203</td>
-<td align="right">0.788</td>
-<td align="right">0.431</td>
-</tr>
-<tr class="even">
-<td align="left">generosity</td>
-<td align="right">-0.112</td>
-<td align="right">0.105</td>
-<td align="right">-1.069</td>
-<td align="right">0.285</td>
-</tr>
-<tr class="odd">
-<td align="left">life_expectance</td>
-<td align="right">0.054</td>
-<td align="right">0.003</td>
-<td align="right">19.635</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="even">
-<td align="left">positive_affect</td>
-<td align="right">2.327</td>
-<td align="right">0.189</td>
-<td align="right">12.295</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="odd">
-<td align="left">corruption</td>
-<td align="right">-0.741</td>
-<td align="right">0.131</td>
-<td align="right">-5.638</td>
-<td align="right">0.000</td>
-</tr>
-<tr class="even">
-<td align="left">developdeveloping</td>
-<td align="right">2.450</td>
-<td align="right">0.679</td>
-<td align="right">3.609</td>
+<td align="left">gdp</td>
+<td align="right">0.248</td>
+<td align="right">0.032</td>
+<td align="right">7.782</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">social_support</td>
-<td align="right">6.169</td>
-<td align="right">0.687</td>
-<td align="right">8.986</td>
+<td align="right">1.549</td>
+<td align="right">0.210</td>
+<td align="right">7.366</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
-<td align="left">corruption:developdeveloping</td>
-<td align="right">0.935</td>
-<td align="right">0.195</td>
-<td align="right">4.807</td>
+<td align="left">life_expectance</td>
+<td align="right">0.033</td>
+<td align="right">0.004</td>
+<td align="right">7.968</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">developdeveloping:social_support</td>
-<td align="right">-4.039</td>
-<td align="right">0.705</td>
-<td align="right">-5.732</td>
+<td align="left">freedom</td>
+<td align="right">0.362</td>
+<td align="right">0.161</td>
+<td align="right">2.245</td>
+<td align="right">0.025</td>
+</tr>
+<tr class="even">
+<td align="left">generosity</td>
+<td align="right">-0.139</td>
+<td align="right">0.132</td>
+<td align="right">-1.054</td>
+<td align="right">0.292</td>
+</tr>
+<tr class="odd">
+<td align="left">corruption</td>
+<td align="right">0.086</td>
+<td align="right">0.165</td>
+<td align="right">0.524</td>
+<td align="right">0.600</td>
+</tr>
+<tr class="even">
+<td align="left">positive_affect</td>
+<td align="right">2.322</td>
+<td align="right">0.217</td>
+<td align="right">10.715</td>
 <td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">negative_affect</td>
+<td align="right">0.078</td>
+<td align="right">0.230</td>
+<td align="right">0.340</td>
+<td align="right">0.734</td>
 </tr>
 </tbody>
 </table>
-<p>According to the ## Discussion:</p>
-<p>What were your findings? Are they what you expect? What insights into the data can you make?</p>
+<ul>
+<li><p>For developing country, there is significant positive effect of <code>gdp</code>, <code>social_support</code>, <code>life_expectance</code> and <code>positive_affect</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
+<li><p>For developing cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -2.320 + 0.255 gdp + 1.525 social_support + 0.033 life_expectance + 2.304 positive_affect???</p></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-3.044</td>
+<td align="right">1.470</td>
+<td align="right">-2.071</td>
+<td align="right">0.039</td>
+</tr>
+<tr class="even">
+<td align="left">gdp</td>
+<td align="right">0.269</td>
+<td align="right">0.108</td>
+<td align="right">2.492</td>
+<td align="right">0.013</td>
+</tr>
+<tr class="odd">
+<td align="left">social_support</td>
+<td align="right">5.853</td>
+<td align="right">0.620</td>
+<td align="right">9.448</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">life_expectance</td>
+<td align="right">0.010</td>
+<td align="right">0.010</td>
+<td align="right">1.056</td>
+<td align="right">0.292</td>
+</tr>
+<tr class="odd">
+<td align="left">freedom</td>
+<td align="right">-0.620</td>
+<td align="right">0.322</td>
+<td align="right">-1.925</td>
+<td align="right">0.055</td>
+</tr>
+<tr class="even">
+<td align="left">generosity</td>
+<td align="right">0.958</td>
+<td align="right">0.181</td>
+<td align="right">5.288</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">corruption</td>
+<td align="right">-0.475</td>
+<td align="right">0.160</td>
+<td align="right">-2.968</td>
+<td align="right">0.003</td>
+</tr>
+<tr class="even">
+<td align="left">positive_affect</td>
+<td align="right">2.217</td>
+<td align="right">0.396</td>
+<td align="right">5.605</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">negative_affect</td>
+<td align="right">-0.528</td>
+<td align="right">0.451</td>
+<td align="right">-1.171</td>
+<td align="right">0.242</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>For developed country, there is significant positive effect of <code>social_support</code>, <code>positive_affect</code> and <code>generosity</code>, and there is significant negative effect of <code>corruption</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
+<li><p>For developed cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -3.323 + 6.097 social_support + 2.095 positive_affect + 1.003 generosity -0.488 corruption???</p></li>
+</ul>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion</h2>
+<p>Although the happiness score slightly increases from 2007 to 2018 in the worldwide level, some regions have decreasing trend, and developed countries also have decreasing trend. It is interesting that the happiness score does not increase given the economic growth.</p>
+<p>From the correlation analysis and the stratified analysis in linear regression, the happiness score is highly associated with the <code>social support</code> and <code>positive affect</code> both in developed countries and developing countries. However, <code>gdp</code> and <code>life expectancy</code> are positively associated with happiness score only in the developing countries, while <code>generosity</code> is positively , and <code>corruption</code> is negatively associated with happiness score only in the developed countries.</p>
+<p>These results are reasonable and mostly what we expect. Overall, happiness score depends on economics (GDP), social support (someone to count on), health (life expectancy), positive mood (positive affect) and perceptions of corruption. For developing countries, economics and health become more important in evaluating happiness, while for developed countries, perceptions of corruption and generosity(donation) become more crucial.</p>
+<p>The government of developing countries should focus more on economic growth and improving healthcare to increase the happiness perception. The government of developed countries should have policies to control the corruption in the business and government and have policies to encourage donation to increase the happiness perception.</p>
 </div>
 
 
