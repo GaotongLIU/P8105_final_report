@@ -22,50 +22,7 @@ color: black;
 </style>
 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-## setup
-library(plotly)
-library(shiny)
-library(tidyverse)
-library(rworldmap)
-library(arsenal)
-library(leaflet)
-library(rworldmap) 
-library(countrycode)  # Gets country code 
-library(viridis)
-## Load code
-happy = read_csv("data/final_data_all_country.csv") %>% 
-  janitor::clean_names() %>% 
-  unique %>% 
-  mutate(label = str_c("<b>Happiness: ", round(life_ladder,2), 
-                      "</b><br>Country : ", country_name,
-                      sep = ""),
-        code = countrycode(country_name, 'country.name', 'iso3c'),## match code
-        code = replace_na(code,"XKX"))
-
-Sys.setenv("plotly_username"="miaoyuqi")
-Sys.setenv("plotly_api_key"="jqJ20PtvBRUpOBj2vlxb")
-# light grey boundaries
-l <- list(color = toRGB("grey"), width = 0.5)
-# specify map projection/options
-g <- list(
-  showframe = FALSE,
-  showcoastlines = FALSE,
-  projection = list(type = 'Mercator')
-)
-p <- plot_geo(happy) %>%
-  add_trace(
-    z = ~life_ladder, color = ~life_ladder, colors = 'Blues',
-    text = ~label, locations = ~code, marker = list(line = l),frame = ~year
-  ) %>%
-  colorbar(title = 'Happiness index') %>%
-  layout(
-    title = "Global Happiness Index",
-    geo = g
-  )
-p <- api_create(p, filename = "global_animation_plot")
-p
-```
+![](zhuye.PNG)
 
 ## Motivation
 As civilizations are developing, the happiness of human being becomes an ambiguous topic.  Simple material enjoyment is no longer the only determinant of mental pleasure. So, how the state of happiness in the world change overtime and what makes the world happy? We are trying to find the reasons, and our final goal is to provide helpful information for governments to make better decisions with respect to higher life evaluation.  
