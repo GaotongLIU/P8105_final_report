@@ -24,6 +24,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -250,6 +251,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -377,6 +381,14 @@ div.tocify {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore"><strong><em>Final report</em></strong></h1>
@@ -423,16 +435,140 @@ color: black;
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
+<pre class="r"><code>data_all = read_excel(&quot;./data/WHR.xls&quot;)%&gt;% 
+ janitor::clean_names() </code></pre>
 <p>We first save the crude dataset as “.xls” format from the website and read it into R and call it <code>data_all</code>. The crude data includes 1704 observations and 26 variables.</p>
+<pre class="r"><code>sum_na = function(x){
+  sum = sum(is.na(x))
+  sum}
+
+missing_number = map(data_all,sum_na) %&gt;% 
+  as.data.frame()  
+
+final_data = 
+  data_all %&gt;% 
+  select(country_name:negative_affect)
+
+write.csv(final_data,file=&quot;data/final_data_all_country.csv&quot;,quote=F,row.names = F)</code></pre>
 <p>After reviewing the whole dataset through checking the missing values in each variable, we decide to keep variables with the number of missing values less than 100. Finally we obtain 11 variables with 1704 observations without deleting any misssing values. Then we write the new tidyed data as <code>final_data_all_country.csv</code>, which is implemented for all the following works.</p>
+<pre class="r"><code>happy = 
+  read_csv(&quot;data/final_data_all_country.csv&quot;) %&gt;% 
+   rename(&quot;country&quot; = country_name,
+          &quot;happiness_score&quot; = life_ladder,
+         &quot;gdp&quot; = log_gdp_per_capita,
+         &quot;life_expectance&quot; = healthy_life_expectancy_at_birth,
+         &quot;freedom&quot; = freedom_to_make_life_choices,
+         &quot;corruption&quot; = perceptions_of_corruption)  %&gt;% 
+  unique() %&gt;% 
+  mutate(o_gdp = exp(gdp)) %&gt;%# in the original data, they use log get the result, i try to transfer in the real way
+  mutate(develop = ifelse(o_gdp &gt; 25000, &quot;developed&quot;, &quot;developing&quot;)) %&gt;% 
+  filter(year &gt; 2006) # actually there is no speicific cretiria to distinguish the developed and developing country.</code></pre>
 <p>In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some <a href="https://www.investopedia.com/updates/top-developing-countries/">economists</a> prefer to see a country with per capita GDP of at least $25,000 to be declared as developed.</p>
+<pre class="r"><code>Asia = 
+  c(&quot;Israel&quot;, &quot;United Arab Emirates&quot;, &quot;Singapore&quot;, &quot;Thailand&quot;, &quot;Taiwan Province of China&quot;,
+                                   &quot;Qatar&quot;, &quot;Saudi Arabia&quot;, &quot;Kuwait&quot;, &quot;Bahrain&quot;, &quot;Malaysia&quot;, &quot;Uzbekistan&quot;, &quot;Japan&quot;,
+                                   &quot;South Korea&quot;, &quot;Turkmenistan&quot;, &quot;Kazakhstan&quot;, &quot;Turkey&quot;, &quot;Hong Kong S.A.R., China&quot;, &quot;Philippines&quot;,
+                                   &quot;Jordan&quot;, &quot;China&quot;, &quot;Pakistan&quot;, &quot;Indonesia&quot;, &quot;Azerbaijan&quot;, &quot;Lebanon&quot;, &quot;Vietnam&quot;,
+                                   &quot;Tajikistan&quot;, &quot;Bhutan&quot;, &quot;Kyrgyzstan&quot;, &quot;Nepal&quot;, &quot;Mongolia&quot;, &quot;Palestinian Territories&quot;,
+                                   &quot;Iran&quot;, &quot;Bangladesh&quot;, &quot;Myanmar&quot;, &quot;Iraq&quot;, &quot;Sri Lanka&quot;, &quot;Armenia&quot;, &quot;India&quot;, &quot;Georgia&quot;,
+                                   &quot;Cambodia&quot;, &quot;Afghanistan&quot;, &quot;Yemen&quot;, &quot;Syria&quot;)
+
+Europe = 
+  c(&quot;Norway&quot;, &quot;Denmark&quot;, &quot;Iceland&quot;, &quot;Switzerland&quot;, &quot;Finland&quot;,
+                                   &quot;Netherlands&quot;, &quot;Sweden&quot;, &quot;Austria&quot;, &quot;Ireland&quot;, &quot;Germany&quot;,
+                                   &quot;Belgium&quot;, &quot;Luxembourg&quot;, &quot;United Kingdom&quot;, &quot;Czech Republic&quot;,
+                                   &quot;Malta&quot;, &quot;France&quot;, &quot;Spain&quot;, &quot;Slovakia&quot;, &quot;Poland&quot;, &quot;Italy&quot;,
+                                   &quot;Russia&quot;, &quot;Lithuania&quot;, &quot;Latvia&quot;, &quot;Moldova&quot;, &quot;Romania&quot;,
+                                   &quot;Slovenia&quot;, &quot;North Cyprus&quot;, &quot;Cyprus&quot;, &quot;Estonia&quot;, &quot;Belarus&quot;,
+                                   &quot;Serbia&quot;, &quot;Hungary&quot;, &quot;Croatia&quot;, &quot;Kosovo&quot;, &quot;Montenegro&quot;,
+                                   &quot;Greece&quot;, &quot;Portugal&quot;, &quot;Bosnia and Herzegovina&quot;, &quot;Macedonia&quot;,
+                                   &quot;Bulgaria&quot;, &quot;Albania&quot;, &quot;Ukraine&quot;)
+
+North_America = 
+  c(&quot;Canada&quot;, &quot;Costa Rica&quot;, &quot;United States&quot;, &quot;Mexico&quot;,  
+                                   &quot;Panama&quot;,&quot;Trinidad and Tobago&quot;, &quot;El Salvador&quot;, &quot;Belize&quot;, &quot;Guatemala&quot;,
+                                   &quot;Jamaica&quot;, &quot;Nicaragua&quot;, &quot;Dominican Republic&quot;, &quot;Honduras&quot;,
+                                   &quot;Haiti&quot;)
+
+Sorth_America =  
+  c(&quot;Chile&quot;, &quot;Brazil&quot;, &quot;Argentina&quot;, &quot;Uruguay&quot;,
+                                   &quot;Colombia&quot;, &quot;Ecuador&quot;, &quot;Bolivia&quot;, &quot;Peru&quot;,
+                                   &quot;Paraguay&quot;, &quot;Venezuela&quot;)
+
+Australia = 
+  c(&quot;New Zealand&quot;, &quot;Australia&quot;)
+
+happy = happy %&gt;% 
+  mutate(continent = case_when(
+    country %in% Asia ~ &quot;Asia&quot;,
+    country %in% Europe ~ &quot;Europe&quot;,
+    country %in% North_America ~ &quot;North America&quot;,
+    country %in% Sorth_America ~ &quot;South America&quot;,
+    country %in% Australia ~ &quot;Australia&quot;,
+    TRUE ~ as.character(&quot;Africa&quot;)
+  ))</code></pre>
 <p>We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents.</p>
+<pre class="r"><code>happy_standard = happy %&gt;% 
+  mutate(s_gdp = scale(gdp),
+         s_social_support = scale(social_support),
+         s_life_expectance = scale(life_expectance),
+         s_freedom = scale(freedom),
+         s_positive_affect = scale(positive_affect),
+         s_negative_affect = scale(negative_affect),
+         s_generosity  = scale(generosity),
+         s_corruption  = scale(corruption)) %&gt;%
+  select(-c(gdp:corruption), -o_gdp)</code></pre>
 <p>To better show the association of other factors and happiness score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of <code>gdp</code> and <code>life_expectancy</code> are dramatically different from other factors.</p>
 </div>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis</h2>
 <div id="happiness-score-of-all-countries-changes-over-time" class="section level3">
 <h3><strong>Happiness score of all countries changes over time</strong></h3>
+<pre class="r"><code>plot1 = happy %&gt;% 
+  filter(year&gt;2006) %&gt;%
+  group_by(year) %&gt;% 
+  summarise(year_mean_score = mean(happiness_score)) %&gt;% 
+  ggplot(aes(x = year, y = year_mean_score)) +
+  geom_path() +
+  labs(title = &quot;Happiness score changes worldwide: 2007-2018&quot;,
+       x = &quot;Year&quot;,
+       y =  &quot;Happiness score&quot;) +
+  scale_x_continuous(
+    breaks = c(2007,2008,2009,2010,2011, 2012, 2013,2014,2015,2016,2017,2018))
+
+plot2 = happy %&gt;% 
+  filter(year&gt;2006)%&gt;%
+  group_by(year, continent) %&gt;% 
+  summarise(year_mean_score = mean(happiness_score)) %&gt;% 
+  ggplot(aes(x = year, y = year_mean_score, color = continent)) +
+  geom_point() +
+  geom_line() +
+  geom_smooth(method = lm, size  = 0.5, 
+              se = FALSE, color = &quot;red&quot;) +  
+  facet_grid(. ~ continent) +
+  labs(title = &quot;Happiness score changes in various continent: 2007-2018&quot;,
+       x = &quot;Year&quot;,
+       y =  &quot;Happiness score&quot;) +
+ theme(legend.position = &quot;none&quot;)
+     
+
+plot3 = happy %&gt;% 
+  filter(year &gt; 2006) %&gt;%
+  drop_na(develop) %&gt;%
+  group_by(year, develop) %&gt;% 
+  summarise(year_mean_score = mean(happiness_score)) %&gt;% 
+  ggplot(aes(x = year, y = year_mean_score, color = develop)) +
+  geom_point() +
+  geom_line() +
+  geom_smooth(method = lm, size  = 0.5, 
+              se = FALSE, color = &quot;red&quot;) +  
+  facet_grid(. ~ develop) +
+  labs(title = &quot;Happiness score changes in developed and developing countries: 2007-2018&quot;,
+       x = &quot;Year&quot;,
+       y =  &quot;Happiness score&quot;)+
+ theme(legend.position = &quot;none&quot;)
+
+plot1/plot2/plot3</code></pre>
 <p><img src="about_files/figure-html/unnamed-chunk-3-1.png" width="100%" /></p>
 <p>We firstly explore the changes of happiness score over time worldwide, by continents and by developing levels.</p>
 <ul>
@@ -444,7 +580,31 @@ color: black;
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-other-factors-worldwide" class="section level3">
 <h3><strong>The correlation plot for happiness score and other factors: worldwide</strong></h3>
-<p><img src="about_files/figure-html/unnamed-chunk-4-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-4-2.png" width="50%" /></p>
+<pre class="r"><code>happy_standard %&gt;% 
+  filter(year&gt;2006) %&gt;%
+  pivot_longer(s_gdp:s_corruption,
+               names_to = &quot;standard_factors&quot;,
+               values_to = &quot;standard_value&quot;) %&gt;% 
+  ggplot(aes(x = happiness_score, y = standard_value,
+             color  = standard_factors)) +
+  geom_point() +
+  geom_boxplot(alpha = .8) +  
+  geom_smooth(method = lm, color = &quot;red&quot;) +
+  facet_grid(. ~ standard_factors) +
+  labs(x = &quot;Happiness score&quot;, 
+       y = &quot;Standard score of other factors&quot;, 
+       title = &quot;Happiness score against other factors worldwide: 2007-2018&quot;) + 
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-4-1.png" width="50%" /></p>
+<pre class="r"><code>happy_standard %&gt;% 
+  drop_na() %&gt;%
+   filter(year &gt; 2006) %&gt;%
+  select(-c(country, year, continent, develop)) %&gt;% 
+  cor() %&gt;%
+  corrplot.mixed(title = &quot;Happiness score against other factors worldwide: 2007-2018&quot;,
+                 tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
+                  mar = c(0,0,1,0))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-4-2.png" width="50%" /></p>
 <ul>
 <li><p>From the scatterplot, the factors <code>negative_affect</code> and <code>corruption</code> have the negative association with happiness score, but <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>generosity</code> have the positive association.</p></li>
 <li><p>From the correlation matrix plot, the happiness score is highly associated with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(&gt; 0.7). In addition, <code>gdp</code> and <code>life_expctancy</code> are highly correlated with each other(&gt; 0.7).</p></li>
@@ -452,7 +612,36 @@ color: black;
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-other-factors-continent" class="section level3">
 <h3><strong>The correlation plot for happiness score and other factors : continent</strong></h3>
-<p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-2.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-5-3.png" width="50%" /></p>
+<pre class="r"><code>happy_standard %&gt;% 
+  drop_na() %&gt;%
+   filter(year&gt;2006)%&gt;%
+  filter(continent == &quot;Australia&quot;) %&gt;% 
+  select(-c(country, year, continent, develop)) %&gt;% 
+  cor() %&gt;%
+  corrplot.mixed(title = &quot;Australia: 2007-2018&quot;,
+                 tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
+                  mar=c(0,0,1,0))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
+<pre class="r"><code>happy_standard %&gt;% 
+  drop_na() %&gt;%
+   filter(year&gt;2006)%&gt;%
+  filter(continent %in% c(&quot;Europe&quot;, &quot;North America&quot;, &quot;South America&quot;))  %&gt;% 
+  select(-c(country, year, continent, develop)) %&gt;% 
+  cor() %&gt;%
+  corrplot.mixed(title = &quot;Europe, North America, South America: 2007-2018&quot;,
+                 tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
+                  mar = c(0,0,1,0))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-5-2.png" width="50%" /></p>
+<pre class="r"><code>happy_standard %&gt;% 
+  drop_na() %&gt;%
+   filter(year &gt; 2006) %&gt;%
+ filter(continent %in% c(&quot;Africa&quot;, &quot;Asia&quot;)) %&gt;% 
+  select(-c(country, year, continent, develop)) %&gt;% 
+  cor() %&gt;%
+  corrplot.mixed(title = &quot;Africa, Asia: 2007-2018 &quot;,
+                 tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
+                  mar=c(0,0,1,0))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-5-3.png" width="50%" /></p>
 <ul>
 <li><p>Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). <code>gdp</code> is strongly positively associated with <code>corruption</code>(0.69) and negatively assoicated with <code>positive_affe t</code>(-0.86)</p></li>
 <li><p>Europe, North America, South America have the medium happiness score, and the score has moderate correlation with <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code> and <code>corruption</code>(0.6 - 0.7)</p></li>
@@ -461,7 +650,26 @@ color: black;
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-othe-factors-developing-level" class="section level3">
 <h3><strong>The correlation plot for happiness score and othe factors : developing level</strong></h3>
-<p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="50%" /><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="50%" /></p>
+<pre class="r"><code>happy_standard %&gt;% 
+  drop_na() %&gt;%
+   filter(year&gt;2006)%&gt;%
+  filter(develop == &quot;developing&quot;) %&gt;% 
+  select(-c( country, year, continent, develop)) %&gt;% 
+  cor() %&gt;%
+  corrplot.mixed(title = &quot;Developing: 2007-2018&quot;,
+                 tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
+                  mar=c(0,0,1,0))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
+<pre class="r"><code>happy_standard %&gt;% 
+  drop_na() %&gt;%
+   filter(year&gt;2006)%&gt;%
+  filter(develop == &quot;developed&quot;) %&gt;% 
+  select(-c(country, year, continent, develop)) %&gt;% 
+  cor() %&gt;%
+  corrplot.mixed(title = &quot;Developed: 2007-2018&quot;,
+                  tl.cex = 1.2, tl.pos = &quot;lt&quot;, number.cex = 1.2,
+                  mar=c(0,0,1,0))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-6-2.png" width="50%" /></p>
 <ul>
 <li><p>Developing coountries have lower happiness score , and the score has moderate correlation with <code>gdp</code>, <code>social support</code> and <code>life_expectancy</code>(around 0.6).</p></li>
 <li><p>Developed coountries have higher happiness score , and the score has moderate correlation with <code>social support</code>,<code>freedom</code>, <code>positive_affect</code>, <code>negative_affect</code>, <code>generosity</code> and <code>corruption</code> (around 0.6)</p></li>
@@ -473,11 +681,37 @@ color: black;
 <p>After visualization the correlation of happiness score and other factors in different levels, we decide to formally test the main effect of <code>gdp</code>, <code>social support</code>, <code>life_expectancy</code>, <code>freedom</code>, <code>positive_affect</code>, <code>negative_affect</code> , <code>generosity</code> and <code>corruption</code> on the happiness score and the <code>interaction</code> effect between several covariates.</p>
 <p>By the inspiration of exploratory correlation plots, the developing levels and continent may also influence the estimates in the regression model. However, we think that the difference of correlation coefficient between continent mainly due to the developing level. Besides, we define the developing level based on the gdp, so we exclude gdp and only include the developing level as categorical variable in the final analysis.</p>
 <ul>
-<li><p>After fitting with total 8 main effects, only five of them showing significant results (P&lt;0.001), so we only use <code>social support</code>, <code>life_expectancy</code>, <code>positive_affect</code> and <code>corruption</code> to interact with <code>develop</code>.</p></li>
+<li>After fitting with total 8 main effects, only five of them showing significant results (P&lt;0.001), so we only use <code>social support</code>, <code>life_expectancy</code>, <code>positive_affect</code> and <code>corruption</code> to interact with <code>develop</code>.</li>
+</ul>
+<pre class="r"><code>data =  happy %&gt;% 
+  mutate(develop = as.factor(develop),
+         continent = as.factor(continent)) %&gt;%
+  select(-c(country, year, o_gdp))
+
+fit1 = lm(happiness_score~ 
+            freedom + 
+            negative_affect + 
+            generosity + 
+            social_support*develop +  
+            life_expectance*develop + 
+            positive_affect*develop + 
+            corruption*develop, data = data)</code></pre>
+<ul>
 <li><p>There is a siginificant interaction effect of <code>social_support</code> and <code>develop</code>, <code>corruption</code> and <code>develop</code>. The effect of <code>social_support</code> and <code>corruption</code> on the Happiness Score is depending on the value of <code>develop</code> at 0.001 significance level.</p></li>
 <li><p>There is no overall significant effect of either <code>develop</code> or <code>life_expectance</code>, but there is a significant crossover interaction at 0.001 significance level. The effect of <code>life_expectance</code> on the Happiness Score is opposite, depending on the value of <code>develop</code>.</p></li>
 </ul>
 <p>To interpret the results, we conduct the stratified analysis based on the developing level. Results are below, and model assumptions are checked after the discussion.</p>
+<pre class="r"><code>developing =  happy %&gt;% 
+  filter(develop == &quot;developing&quot;) %&gt;% 
+  select(-c(o_gdp, develop, continent, country, year)) 
+  
+developed =  happy %&gt;% 
+  filter(develop == &quot;developed&quot;) %&gt;% 
+  select(-c(o_gdp, develop, continent, country, year)) 
+
+fit2 = lm(happiness_score~., data = developing)
+fit3 = lm(happiness_score~., data = developed)</code></pre>
+<pre class="r"><code>fit2 %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 3)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -558,6 +792,7 @@ color: black;
 <li><p>For developing country, there is significant positive effect of <code>gdp</code>, <code>social_support</code>, <code>life_expectance</code> and <code>positive_affect</code> on the Happiness Score, at 0.001 siginificance level.</p></li>
 <li><p>For developing cooutry, the estimate linear equation is: <span class="math inline">\(\hat{Happiness Score}\)</span> = -2.320 + 0.255 gdp + 1.525 social_support + 0.033 life_expectance + 2.304 positive_affect???</p></li>
 </ul>
+<pre class="r"><code>fit3 %&gt;% broom::tidy() %&gt;% knitr::kable(digits = 3)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -682,6 +917,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
