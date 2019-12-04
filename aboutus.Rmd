@@ -8,11 +8,32 @@ output:
 editor_options: 
   chunk_output_type: console
 ---
-
+<style type = "text/css">
+body{ /* Normal */
+    font-size: 14px;
+    color: black;
+}
+h1.title {
+font-size: 38px;
+color: teal;
+}
+h2{ /* Header 2 */
+font-size: 28px;
+color: teal;
+}
+h3{ /* Header 3 */
+font-size: 18px;
+color: teal;
+}
+</style>
 
 # Yuqi Miao
 
 # Ruoyuan Qian
+
+I am focusing on the data exploration and association map. The project gives me a chance to analysis data from real world and helps me have a deep sense in plotly and shiny! 
+
+- [Here](https://ruoyuanqian.github.io) is my website!
 
 # Gaotong Liu
 
