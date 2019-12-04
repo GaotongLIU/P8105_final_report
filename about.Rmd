@@ -284,18 +284,11 @@ happy_location =
 ```
 
 ## Exploratory analysis
-### **Happiness score of all countries changes over time** 
+### **How do the happiness scores of all countries change over time?** 
 
 We firstly explore the changes of happiness score over time worldwide, by continents and by developing levels.
 
-* From the first plot, we can easily find that the mean happiness score increases from 2007 to 2010, and gradually decreases to the lowest point in 2014. Finally, it increases in the recent years. 2014, 2018
-
-* From the second plot, we divide these countries into different regions by the geographic continent. Australia has the overall highest and Africa has the overall lowest happiness score. Only Europe and Asia show the general increasing trend of happiness score over time. 
-
-* We can roughly further divide these continents into three groups base on the happiness scores. The high happiness score group contains Australis, the medium happiness score group contains Europe, North America and South America, and the low happiness score group contains Africa and Asia. 
-
-* From the third plot, the mean happiness score is obviously higher in developed countries than it in developing countries. 
-
+* Worldwide
 ```{r, warning=FALSE}
 plot1 = happy %>% 
   group_by(year) %>% 
@@ -309,7 +302,13 @@ plot1 = happy %>%
     breaks = c(2007,2008,2009,2010,2011, 2012, 2013,2014,2015,2016,2017,2018))
 
 plot1+transition_reveal(year)
+```
 
+
+From the first plot, we can easily find that the mean happiness score increases from 2007 to 2010, and gradually decreases to the lowest point in 2014. Finally, it increases in the recent years. 2014, 2018
+
+* By continent
+```{r, warning=FALSE}
 plot2 = happy %>% 
   group_by(year, continent) %>% 
   summarise(year_mean_score = mean(happiness_score)) %>% 
@@ -323,8 +322,15 @@ plot2 = happy %>%
        x = "Year",
        y =  "Happiness score") +
  theme(legend.position = "none")
-     
+plot2
+```
 
+From the second plot, we divide these countries into different regions by the geographic continent. Australia has the overall highest and Africa has the overall lowest happiness score. Only Europe and Asia show the general increasing trend of happiness score over time. 
+
+We can roughly further divide these continents into three groups base on the happiness scores. The high happiness score group contains Australis, the medium happiness score group contains Europe, North America and South America, and the low happiness score group contains Africa and Asia. 
+
+* By developing level
+```{r, warning=FALSE}
 plot3 = happy %>% 
   drop_na(develop) %>%
   group_by(year, develop) %>% 
@@ -340,16 +346,15 @@ plot3 = happy %>%
        y =  "Happiness score")+
  theme(legend.position = "none")
 
-plot2/plot3
+plot3
 ```
 
+From the third plot, the mean happiness score is obviously higher in developed countries than it in developing countries. 
 
 
-### **The correlation plot for happiness score and other factors: worldwide**
+### **What are the correlated factors?**
 
-* From the scatterplot, the factors `negative_affect` and `corruption` have the negative association with happiness score, but `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `generosity` have the positive association.
-
-* From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social_support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
+#### The correlation plot for happiness score and other factors: worldwide
 
 ```{r, warning=FALSE, out.width = "70%",fig.align="center"}
 happy_standard %>% 
@@ -376,13 +381,12 @@ happy %>%
                   mar = c(0,0,1,0))
 ```
 
-### **The correlation plot for happiness score and other factors : continent**
 
-* Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). `gdp` is strongly positively associated with `corruption`(0.69) and negatively assoicated with `positive_affe t`(-0.86) 
+* From the scatterplot, the factors `negative_affect` and `corruption` have the negative association with happiness score, but `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `generosity` have the positive association.
 
-* Europe, North America, South America  have the medium happiness score, and the score has  moderate correlation with `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `corruption`(0.6 - 0.7) 
+* From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social_support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
 
-* Africa and Asia have the lowest happiness score,  and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
+#### The correlation plot for happiness score and other factors : continent
 
 ```{r, warning=FALSE, out.width = "70%",fig.align="center"}
 happy %>% 
@@ -413,14 +417,14 @@ happy %>%
                   mar=c(0,0,1,0))
 ```
 
+* Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). `gdp` is strongly positively associated with `corruption`(0.69) and negatively assoicated with `positive_affe t`(-0.86) 
+
+* Europe, North America, South America  have the medium happiness score, and the score has  moderate correlation with `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `corruption`(0.6 - 0.7) 
+
+* Africa and Asia have the lowest happiness score,  and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
 
 
-### **The correlation plot for happiness score and othe factors : developing level**
-
-
-* Developing coountries have lower happiness score , and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(around  0.6). 
-
-* Developed coountries have higher happiness score , and the score has moderate correlation with `social support`,`freedom`, `positive_affect`, `negative_affect`, `generosity` and `corruption` (around 0.6)
+#### The correlation plot for happiness score and othe factors : developing level**
 
 ```{r,  warning=FALSE, out.width = "70%",fig.align="center"}
 happy %>% 
@@ -441,6 +445,10 @@ happy %>%
                   tl.cex = 1.2, tl.pos = "lt", number.cex = 1.2,
                   mar=c(0,0,1,0))
 ```
+
+* Developing coountries have lower happiness score , and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(around  0.6). 
+
+* Developed coountries have higher happiness score , and the score has moderate correlation with `social support`,`freedom`, `positive_affect`, `negative_affect`, `generosity` and `corruption` (around 0.6)
 
 
 ## Statistical Analysis(MLR)
@@ -503,7 +511,7 @@ fit3 %>% broom::tidy() %>% knitr::kable(digits = 3)
 
 ## Discussion
 
-Although the happiness score slightly increases from 2007 to 2018 in the worldwide level, some regions have decreasing trend, and developed countries also have decreasing trend. It is interesting that the happiness score does not increase given the economic growth.
+In this report, we explore the world happiness score changing trend and associate factors in worldwide, by region and by developing level. Although the happiness score slightly increases from 2007 to 2018 in the worldwide level, several regions have decreasing trends, and when performing stratified analysis by developing level, developed countries also have decreasing trend. Further explore using our map and app, we can find that as the economy develops to higher level, the increasing rate of happiness score is decreasing. Since the material increase can not fit the demand of people, we explore more on the association factors to the happiness score.
 
 From the correlation analysis and the stratified analysis in linear regression, the happiness score is highly associated with the `social support` and `positive affect` both in developed countries and developing countries. However, `gdp` and `life expectancy` are positively associated with happiness score only in the developing countries, while `generosity` is positively , and `corruption` is negatively associated with happiness score only in the developed countries. 
 
