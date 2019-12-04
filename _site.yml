@@ -5,16 +5,15 @@ navbar:
   right:
     - text: "Final report"
       href: about.html
-    - text: "Data"
-      href: data.html
-    - text: "About us"
-      href: aboutus.html
     - text: "Associaiton Map"
-      href: https://yuqimiao.shinyapps.io/Gaotong/
+      href: https://yuqimiao.shinyapps.io/association_plot-copy/
     - text: "Global Animation Map"
       href: global_animation_plot.html
+    - icon: fas fa-users fa-lg
+      href: aboutus.html
     - icon: fa-envelope fa-lg
       href: mailto:<gl2677@cumc.columbia.edu>
+    - icon: fas fa-video fa-lg
     - icon: fa-github fa-lg
       href: https://github.com/GaotongLIU/P8105_final_report.io.git
 output:
