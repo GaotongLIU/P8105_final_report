@@ -628,7 +628,9 @@ happy_location =
   scale_x_continuous(
     breaks = c(2007,2008,2009,2010,2011, 2012, 2013,2014,2015,2016,2017,2018))
 
-plot2 = happy %&gt;% 
+plot1+transition_reveal(year)</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-4-1.gif" width="100%" /></p>
+<pre class="r"><code>plot2 = happy %&gt;% 
   group_by(year, continent) %&gt;% 
   summarise(year_mean_score = mean(happiness_score)) %&gt;% 
   ggplot(aes(x = year, y = year_mean_score, color = continent)) +
@@ -658,8 +660,8 @@ plot3 = happy %&gt;%
        y =  &quot;Happiness score&quot;)+
  theme(legend.position = &quot;none&quot;)
 
-plot1/plot2/plot3</code></pre>
-<p><img src="about_files/figure-html/unnamed-chunk-4-1.png" width="100%" /></p>
+plot2/plot3</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-4-2.png" width="100%" /></p>
 </div>
 <div id="the-correlation-plot-for-happiness-score-and-other-factors-worldwide" class="section level3">
 <h3><strong>The correlation plot for happiness score and other factors: worldwide</strong></h3>
