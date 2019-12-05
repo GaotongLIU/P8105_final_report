@@ -47,7 +47,7 @@ I am working on the exploratory analysis, correlation analysis in different cont
 
 
 # Shuyi Shen
-I try to add gif, write some parts of the final report and arrange the website. The project gives me a chance to learn something new like shiny and building website. What's more, I got a sense of group coorperation.
+I try to add gif, write some parts of the final report and arrange the website. The project gives me a chance to learn something new like shiny and building website. What's more, I got a sense of group coorperation and it's amazing!
 
 If you want to know more about me, [here](https://ss-kathy.github.io/) is my personal website.
 
