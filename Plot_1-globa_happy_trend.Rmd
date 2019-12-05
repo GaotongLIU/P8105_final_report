@@ -118,54 +118,6 @@ server <- shinyServer(function(input, output) {
 shinyApp(ui, server)
 ```
 
-
-
-
-## try to add gif(zhazha shuyi)
-```{r,include = F}
-library(magick)
-library(animation)
-#install.packages("rbokeh")
-library(rbokeh)
-library(htmlwidgets)
-library(mapview)
-library(webshot)
-library(processx)
-#install.packages("listviewer")
-library(listviewer)
-library(gridExtra)
-
-saveWidget(global_happy_year(2011),file = "m2011.html")
-saveWidget(global_happy_year(2016),file = "m2016.html")
-saveWidget(global_happy_year(2017),file = "m2017.html")
-saveWidget(global_happy_year(2018),file = "m2018.html")
-
-webshot::install_phantomjs()
-webshot(url = "m2011.html",file = "data/m2011.jpg",vwidth = 990,
-  vheight = 750, delay = 0.5)
-webshot(url = "m2016.html",file = "data/m2016.jpg",vwidth = 992,
-  vheight = 744, delay =0.5 )
-webshot(url = "m2017.html",file = "data/m2017.jpg",vwidth = 992,
-  vheight = 744, delay = 0.5)
-webshot(url = "m2018.html",file = "data/m2018.jpg",vwidth = 990,
-  vheight = 750, delay = 0.5)
-
-
-global_happy_year(2018)
-global_happy_year(2017)
-global_happy_year(2016)
-global_happy_year(2011)
-
-list.files(path = "data/",pattern = "*.jpg",full.names = T) %>% 
-  map(image_read) %>% 
-  image_join() %>% 
-  image_animate(fps=2) 
-
-
-
-```
-
-
 ### yuqimiao add animation bar to the plot.
 
 ```{r}
