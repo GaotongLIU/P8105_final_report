@@ -14,6 +14,7 @@ navbar:
     - icon: fa-envelope fa-lg
       href: mailto:<gl2677@cumc.columbia.edu>
     - icon: fas fa-video fa-lg
+      href: https://www.youtube.com/embed/gCIvLZXb04A
     - icon: fa-github fa-lg
       href: https://github.com/GaotongLIU/P8105_final_report.io.git
 output:
