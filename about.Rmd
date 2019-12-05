@@ -31,18 +31,19 @@ color: black;
 
 ## Motivation
 
-Aristotle once said, “Happiness is the meaning and purpose of life.” However, as civilizations are developing, the happiness of human being becomes an ambiguous topic. Simple material enjoyment is no longer the only determinant of mental pleasure. Therefore, we wonder how the state of happiness in the world change overtime and what makes the world happy? For this purpose, 165 countries, 12 years from 2008 to 2018 and 8 factors about happiness are included in our analysis. 
+Aristotle once said, “Happiness is the meaning and purpose of life.” However, as civilizations are developing, the happiness of human being becomes an ambiguous topic. Simple material enjoyment is no longer the only determinant of mental pleasure. Therefore, we wonder how the state of happiness in the world changes over time and what makes the world happy? For this purpose, 156 countries, 12 years from 2007 to 2018 and 8 factors about happiness are included in our analysis.
 
 ## Related work
 
-Our common interest on happiness around the world and appropriate dataset online make us choose this topic. 
+Our common interest in happiness around the world and the appropriate dataset online make us choose this topic. Also, the knowledge we have learned makes us think about whether we can visualize the global changes in happiness and identify some related factors.
+
 
 ## Initial questions 
 
-We sought to see the general trend of happiness, indicating by life ladder, over recent years of each country around the world. We were also interested in examining influential factors on happiness  and the strength of their association. In addition, during the process of analysis, we found stratification might help the analysis and therefore, countries were divided into the developing and developed in the first model, into different regions in the second model. As such, our questions were as follows:
+We sought to see the general trend of happiness, indicating by life ladder, over recent years of each country around the world. We were also interested in examining influential factors on happiness and the strength of their association. In addition, during the process of analysis, we found stratification might help the analysis and therefore, countries were divided by developing levels and regions. As such, our questions were as follows:
 
-* What are the influential factors on happiness? How can we visualize these correlations?
 * How does happiness change in each country over recent years?
+* What are the influential factors of happiness? How can we visualize these correlations?
 * If the association differs in different regions?
 * If the association differs among developing and developed countries?
 
@@ -50,36 +51,36 @@ We sought to see the general trend of happiness, indicating by life ladder, over
 
 The information was gathered primarily from *The World Happiness Report* created by the United Nations Sustainable Development Solutions Network [(UNSDSN)](https://worldhappiness.report/). Data was collected by asking respondents to value their lives today on a 0 to 10 scale, with the worst possible life as a 0 and the best possible life as a 10. This gave us a chance to compare happiness levels and inequality in different parts of the world.
 
-Furthermore, we find capital longitude and latitude from [kaggle](https://www.kaggle.com/sabihaif/world-happiness-report-analysis/data) to locate a country when drawing association map.
+Furthermore, we find capital longitude and latitude from [kaggle](https://www.kaggle.com/sabihaif/world-happiness-report-analysis/data) to locate a country when drawing an association map.
 
 ### Variable definition
 
 Outcome and factors that we’re interested in：
 
-* `Life Ladder`: Happiness score or subjective well-being, with steps numbered from 0 at the bottom to 10 at the top.(we renamed it as happiness_score in dataset)
+* `Life Ladder`: Happiness score or subjective well-being, with steps numbered from 0 at the bottom to 10 at the top.(we renamed it as `happiness_score` in dataset)
 
-* `LOG GDP per capita`: the log value of GDP per capita (variable name gdp) in purchasing power parity (PPP).(we renamed it as gdp in dataset)
+* `LOG GDP per capita`: the log value of GDP per capita (variable name gdp) in purchasing power parity (PPP).(we renamed it as `gdp` in dataset)
 
-* `Social support`: the national average of the binary responses (either 0 or 1) to the GWP(Gallup World Poll) question “If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?”(we renamed it as gdp in dataset)
+* `Social support`: the national average of the binary responses (either 0 or 1) to the GWP(Gallup World Poll) question “If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?”(we renamed it as `social_support`  in dataset)
 
-* `Healthy life expectancy at birth`: Healthy life expectancies at birth are based on the data extracted from the World Health Organization’s (WHO) Global Health Observatory data repository.(we renamed it as life_expectance in dataset)
+* `Healthy life expectancy at birth`: Healthy life expectancies at birth are based on the data extracted from the World Health Organization’s (WHO) Global Health Observatory data repository.(we renamed it as `life_expectance` in dataset)
 
-* `Freedom to make life choices`: the national average of responses (either 0 or 1) to the GWP question “Are you satisfied or dissatisfied with your freedom to choose what you do with your life?” (we renamed it as freedom" in dataset)
+* `Freedom to make life choices`: the national average of responses (either 0 or 1) to the GWP question “Are you satisfied or dissatisfied with your freedom to choose what you do with your life?” (we renamed it as `freedom` in dataset)
 
-* `Generosity`: the residual of regressing national average of response to the GWP question “Have you donated money to a charity in the past month?” on GDP per capita.
+* `Generosity`: the residual of regressing national average of response to the GWP question “Have you donated money to a charity in the past month?” on GDP per capita.(we renamed it as `generosity` in dataset)
 
-* `Perceptions of corruption`: the national average of the survey responses to two questions in the GWP: “Is corruption widespread throughout the government or not” and “Is corruption widespread within businesses or not?” The overall perception is just the average of the two 0-or-1 responses.(we renamed it as corruption in dataset)
+* `Perceptions of corruption`: the national average of the survey responses to two questions in the GWP: “Is corruption widespread throughout the government or not” and “Is corruption widespread within businesses or not?” The overall perception is just the average of the two 0-or-1 responses.(we renamed it as `corruption` in dataset)
 
 * `Positive affect`: the average of three positive affect measures in GWP: happiness, laugh and enjoyment in the GWP, respectively the responses to
 “Did you experience the following feelings during A LOT OF THE DAY yesterday? How about Happiness?”, “Did you smile or laugh a lot yesterday?”,
 and “Did you experience the following feelings during A LOT OF THE DAY
-yesterday? How about Enjoyment?”.
+yesterday? How about Enjoyment?”.(we renamed it as `positive_affect` in dataset)
 
 * `Negative affect`: the average of three negative affect measures like worry, sadness and anger in GWP, respectively the responses to “Did
 you experience the following feelings during A LOT OF THE DAY yesterday?
 How about Worry?”, “Did you experience the following feelings during A LOT
 OF THE DAY yesterday? How about Sadness?”, and “Did you experience the
-following feelings during A LOT OF THE DAY yesterday? How about Anger?”
+following feelings during A LOT OF THE DAY yesterday? How about Anger?” (we renamed it as `negative_affect` in dataset)
 
 ### Loading and tidying data
 
@@ -99,7 +100,7 @@ library(ggplot2)
 knitr::opts_chunk$set(
   fig.width = 8,
   fig.asp = 1,
-  out.width = "100%",
+  out.width = "90%",
   echo = TRUE,
   message = FALSE)
 
@@ -121,7 +122,7 @@ data_all = read_excel("./data/WHR.xls")%>%
 
 After reviewing the whole dataset through checking the missing values in each variable and in each year, we decide to keep variables with the number of missing values less than 100 and observations from 2007-2018.
 
-Finally we obtain 11 variables with 1588 observations from 164 countries without deleting any misssing values. Then we write the new tidyed data as `final_data_all_country.csv`, which is implemented for all the following works.
+Finally we obtain 11 variables with 1588 observations from 164 countries without deleting any missing values. Then we write the new tidied data as `final_data_all_country.csv`, which is implemented for all the following works.
 
 ```{r ,warning=FALSE}
 sum_na = function(x){
@@ -141,7 +142,7 @@ write.csv(final_data,file="data/final_data_all_country.csv",quote=F,row.names = 
 
 ### For exploratory analysis
 
-In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some [economists](https://www.investopedia.com/updates/top-developing-countries/) prefer to see a country with per capita GDP of at least $25,000 to be declared as developed. In the original data, they use log get the result, we transfer it in the real way to find cutpoint for developed and developing country.
+In the original data, they use log to get the result of GDP, we try to transfer it back to the real scale. We divide these countries into developing and developed country by the criteria that some [economists](https://www.investopedia.com/updates/top-developing-countries/) prefer to see a country with per capita GDP of at least $25,000 to be declared as developed. 
 
 ```{r rename develop, warning=FALSE}
 happy = 
@@ -157,7 +158,7 @@ happy =
   mutate(develop = ifelse(o_gdp > 25000, "developed", "developing"))  
 ```
 
-We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change dependes on variaous continents. 
+We add a new variable to distinguish the continent, because we want to see whether the association of happiness scores and other factors will change depends on various continents.
 
 ```{r continent,  warning=FALSE}
 Asia = 
@@ -205,7 +206,7 @@ happy = happy %>%
   ))
 ```
 
-To better show the association of other factors and happiness score, we standardaize the value of other factors by substracting mean and devideing standard error. This is becasue the scale of `gdp`  and  `life_expectancy` are dramatically different from other factors. 
+To better show the association of other factors and happiness score, we standardize the value of other factors by subtracting mean and dividing standard error. This is because  the scale of `gdp`  and  `life_expectancy` are dramatically different from other factors. 
 
 ```{r Standardaization, warning=FALSE}
 happy_standard = happy %>% 
@@ -284,12 +285,12 @@ happy_location =
 ```
 
 ## Exploratory analysis
-### **How do the happiness scores of all countries change over time?** 
+### **Happiness score of all countries changes over time** 
 
-We firstly explore the changes of happiness score over time worldwide, by continents and by developing levels.
+We firstly explore the changes in happiness score over time worldwide, by continents and by developing levels.
 
 * Worldwide
-```{r, warning=FALSE}
+```{r, warning=FALSE, out.width = "70%"}
 plot1 = happy %>% 
   group_by(year) %>% 
   summarise(year_mean_score = mean(happiness_score)) %>% 
@@ -305,9 +306,9 @@ plot1+transition_reveal(year)
 ```
 
 
-From the first plot, we can easily find that the mean happiness score increases from 2007 to 2010, and gradually decreases to the lowest point in 2014. Finally, it increases in the recent years. 2014, 2018
+From the first plot, we can easily find that the mean happiness score increases from 2007 to 2010, and gradually decreases to the lowest point in 2014. Finally, it increases in recent years. 
 
-* By continent
+* By continent and developing level
 ```{r, warning=FALSE}
 plot2 = happy %>% 
   group_by(year, continent) %>% 
@@ -322,15 +323,6 @@ plot2 = happy %>%
        x = "Year",
        y =  "Happiness score") +
  theme(legend.position = "none")
-plot2
-```
-
-From the second plot, we divide these countries into different regions by the geographic continent. Australia has the overall highest and Africa has the overall lowest happiness score. Only Europe and Asia show the general increasing trend of happiness score over time. 
-
-We can roughly further divide these continents into three groups base on the happiness scores. The high happiness score group contains Australis, the medium happiness score group contains Europe, North America and South America, and the low happiness score group contains Africa and Asia. 
-
-* By developing level
-```{r, warning=FALSE}
 plot3 = happy %>% 
   drop_na(develop) %>%
   group_by(year, develop) %>% 
@@ -346,15 +338,20 @@ plot3 = happy %>%
        y =  "Happiness score")+
  theme(legend.position = "none")
 
-plot3
+plot2/plot3
+
 ```
+
+From the second plot, we divide these countries into different regions by the geographic continent. Australia has the overall highest and Africa has the overall lowest happiness score. Only Europe and Asia show the general increasing trend of happiness score over time. 
+
+We can roughly further divide these continents into three groups base on the happiness scores. The high happiness score group contains Australis, the medium happiness score group contains Europe, North America and South America, and the low happiness score group contains Africa and Asia. 
+
 
 From the third plot, the mean happiness score is obviously higher in developed countries than it in developing countries. 
 
 
-### **What are the correlated factors?**
+### **The correlation plot for happiness score and other factors: worldwide**
 
-#### The correlation plot for happiness score and other factors: worldwide
 
 ```{r, warning=FALSE, out.width = "70%",fig.align="center"}
 happy_standard %>% 
@@ -386,7 +383,7 @@ happy %>%
 
 * From the correlation matrix plot, the happiness score is highly associated with `gdp`, `social_support` and `life_expectancy`(> 0.7). In addition, `gdp` and `life_expctancy` are highly correlated with each other(> 0.7).
 
-#### The correlation plot for happiness score and other factors : continent
+### **The correlation plot for happiness score and other factors : continent**
 
 ```{r, warning=FALSE, out.width = "70%",fig.align="center"}
 happy %>% 
@@ -417,14 +414,14 @@ happy %>%
                   mar=c(0,0,1,0))
 ```
 
-* Australia has the highest happiness score, and the score does not have high correlation with other factors(not greater than 0.4). `gdp` is strongly positively associated with `corruption`(0.69) and negatively assoicated with `positive_affe t`(-0.86) 
+* Australia has the highest happiness score, and the score does not have a high correlation with other factors(not greater than 0.4). `gdp` is strongly positively associated with `corruption`(0.69) and negatively associated with `positive_affe t`(-0.86) 
 
-* Europe, North America, South America  have the medium happiness score, and the score has  moderate correlation with `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `corruption`(0.6 - 0.7) 
+* Europe, North America, South America  have the medium happiness score, and the score has a moderate correlation with `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect` and `corruption`(0.6 - 0.7) 
 
-* Africa and Asia have the lowest happiness score,  and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
+* Africa and Asia have the lowest happiness score,  and the score has a moderate correlation with `gdp`, `social support` and `life_expectancy`(0.6 - 0.7).
 
 
-#### The correlation plot for happiness score and othe factors : developing level**
+### **The correlation plot for happiness score and othe factors : developing level**
 
 ```{r,  warning=FALSE, out.width = "70%",fig.align="center"}
 happy %>% 
@@ -446,18 +443,18 @@ happy %>%
                   mar=c(0,0,1,0))
 ```
 
-* Developing coountries have lower happiness score , and the score has moderate correlation with `gdp`, `social support` and `life_expectancy`(around  0.6). 
+* Developing countries have lower happiness score, and the score has a moderate correlation with `gdp`, `social support` and `life_expectancy`(around  0.6). 
 
-* Developed coountries have higher happiness score , and the score has moderate correlation with `social support`,`freedom`, `positive_affect`, `negative_affect`, `generosity` and `corruption` (around 0.6)
+* Developed countries have higher happiness score , and the score has a moderate correlation with `social support`,`freedom`, `positive_affect`, `negative_affect`, `generosity` and `corruption` (around 0.6)
 
 
 ## Statistical Analysis(MLR)
 
-After visualization the correlation of happiness score and other factors in different levels, we decide to formally test the main effect of `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect`, `negative_affect` , `generosity` and `corruption` on the happiness score and the `interaction` effect between several covariates. 
+After visualization of the correlation of happiness score and other factors in different levels, we decide to formally test the main effect of `gdp`, `social support`, `life_expectancy`, `freedom`, `positive_affect`, `negative_affect` , `generosity` and `corruption` on the happiness score and the `interaction` effect between several covariates. 
 
-By the inspiration of exploratory correlation plots, the developing levels and continent may also influence the estimates in the regression model. However, we think that the difference of correlation coefficient between continent mainly due to the developing level. Besides, we define the developing level based on the gdp, so we exclude gdp and only include the developing level as categorical variable in the final analysis. 
+By the inspiration of exploratory correlation plots, the developing levels and continent may also influence the estimates in the regression model. However, wwe think that the difference in correlation coefficient between continents mainly due to the developing level. . Besides, we define the developing level based on the gdp, so we exclude gdp and only include the developing level as a categorical variable in the final analysis. 
 
-* After fitting with total 8 main effects, only five of them showing significant results (P<0.001), so we only use `social support`, `life_expectancy`, `positive_affect` and `corruption` to interact with `develop`. 
+* After fitting with total of 8 main effects, only five of them showing significant results (P<0.001), so we only use `social support`, `life_expectancy`, `positive_affect` and `corruption` to interact with `develop`. 
 
 ```{r}
 data =  happy %>% 
@@ -476,7 +473,7 @@ fit1 = lm(happiness_score~
 
 ```
 
-* There is a siginificant interaction effect of `social_support` and `develop`, `corruption` and `develop`. The effect of `social_support` and `corruption`  on the Happiness Score is depending on the value of `develop` at 0.001 significance level.
+* There is a significant interaction effect of `social_support` and `develop`, `corruption` and `develop`. The effect of `social_support` and `corruption`  on the Happiness Score is depending on the value of `develop` at 0.001 significance level.
 
 * There is no overall significant effect of either `develop` or `life_expectance`, but there is a significant crossover interaction at 0.001 significance level. The effect of `life_expectance` on the Happiness Score is opposite, depending on the value of `develop`.
 
@@ -496,7 +493,7 @@ fit3 = lm(happiness_score~., data = developed)
 
 ```
 
-* For developing country, there is significant positive effect of `gdp`, `social_support`, `life_expectance` and `positive_affect` on the Happiness Score, at 0.001 siginificance level. 
+* For developing countries, there is a significant positive effect of  `gdp`, `social_support`, `life_expectance` and `positive_affect` on the Happiness Score, at 0.001 significance level. 
 
 ```{r}
 fit2 %>% broom::tidy() %>% knitr::kable(digits = 3)
@@ -511,7 +508,7 @@ fit3 %>% broom::tidy() %>% knitr::kable(digits = 3)
 
 ## Discussion
 
-In this report, we explore the world happiness score changing trend and associate factors in worldwide, by region and by developing level. Although the happiness score slightly increases from 2007 to 2018 in the worldwide level, several regions have decreasing trends, and when performing stratified analysis by developing level, developed countries also have decreasing trend. Further explore using our map and app, we can find that as the economy develops to higher level, the increasing rate of happiness score is decreasing. Since the material increase can not fit the demand of people, we explore more on the association factors to the happiness score.
+Although the happiness score slightly increases from 2007 to 2018 in the worldwide level, some regions have decreasing trend, and developed countries also have decreasing trend. It is interesting that the happiness score does not increase given the economic growth.
 
 From the correlation analysis and the stratified analysis in linear regression, the happiness score is highly associated with the `social support` and `positive affect` both in developed countries and developing countries. However, `gdp` and `life expectancy` are positively associated with happiness score only in the developing countries, while `generosity` is positively , and `corruption` is negatively associated with happiness score only in the developed countries. 
 
